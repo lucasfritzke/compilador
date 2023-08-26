@@ -57,7 +57,7 @@ public class Main {
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		frame.getContentPane().add(splitPane);
 		
-		TextArea textArea = new TextArea();
+		JTextArea textArea = new JTextArea();
 		textArea.setRows(20);
 		textArea.setColumns(20);
 		splitPane.setLeftComponent(textArea);
@@ -67,6 +67,7 @@ public class Main {
 		splitPane.setRightComponent(textArea_1);
 		
 		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
 		springLayout.putConstraint(SpringLayout.NORTH, toolBar, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, toolBar, 0, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, toolBar, -17, SpringLayout.NORTH, splitPane);
