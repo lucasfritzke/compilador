@@ -53,12 +53,18 @@ public class Main {
         textArea.setBorder(new NumberedBorder());
         
         JScrollPane textScrollPane = new JScrollPane(textArea); // Crie um JScrollPane para o JTextArea
-        textScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Mantenha a barra de rolagem sempre visível
+        textScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        textScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);// Mantenha a barra de rolagem sempre visível
         splitPane.setLeftComponent(textScrollPane); // Adicione o JScrollPane ao SplitPane
 
-        TextArea textArea_1 = new TextArea(10,20);
+        
+        
+        JTextArea textArea_1 = new JTextArea(10,20);
         textArea_1.setEditable(false);
-        splitPane.setRightComponent(textArea_1);
+        JScrollPane textScrollPane_1 = new JScrollPane(textArea_1);
+        textScrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        textScrollPane_1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        splitPane.setRightComponent(textScrollPane_1);
 
         JToolBar toolBar = new JToolBar();
         springLayout.putConstraint(SpringLayout.NORTH, toolBar, 10, SpringLayout.NORTH, frame.getContentPane());
