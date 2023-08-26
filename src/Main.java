@@ -41,7 +41,7 @@ public class Main {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 927, 600);
+		frame.setBounds(100, 100, 944, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SpringLayout springLayout = new SpringLayout();
 		frame.getContentPane().setLayout(springLayout);
@@ -80,9 +80,9 @@ public class Main {
 		
 		JProgressBar progressBar = new JProgressBar();
 		springLayout.putConstraint(SpringLayout.NORTH, progressBar, 6, SpringLayout.SOUTH, splitPane);
-		springLayout.putConstraint(SpringLayout.WEST, progressBar, -891, SpringLayout.EAST, toolBar);
+		springLayout.putConstraint(SpringLayout.WEST, progressBar, -900, SpringLayout.EAST, splitPane);
 		springLayout.putConstraint(SpringLayout.SOUTH, progressBar, -10, SpringLayout.SOUTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, progressBar, 0, SpringLayout.EAST, toolBar);
+		springLayout.putConstraint(SpringLayout.EAST, progressBar, -10, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(progressBar);
 	}
 }
