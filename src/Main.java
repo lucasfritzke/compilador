@@ -8,6 +8,9 @@ import javax.swing.JSplitPane;
 import java.awt.TextArea;
 import javax.swing.JToolBar;
 import javax.swing.JProgressBar;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class Main {
 
@@ -60,6 +63,7 @@ public class Main {
 		splitPane.setLeftComponent(textArea);
 		
 		TextArea textArea_1 = new TextArea();
+		textArea_1.setEditable(false);
 		splitPane.setRightComponent(textArea_1);
 		
 		JToolBar toolBar = new JToolBar();
@@ -69,14 +73,22 @@ public class Main {
 		springLayout.putConstraint(SpringLayout.EAST, toolBar, 0, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(toolBar);
 		
-		JButton btnNewButton = new JButton("New button");
-		toolBar.add(btnNewButton);
+		JButton btnNewButton_3 = new JButton("");
+		ImageIcon i = new ImageIcon(Main.class.getResource("/icons/novo.png"));
+		btnNewButton_3.setIcon(i);
+		toolBar.add(btnNewButton_3);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		toolBar.add(btnNewButton_1);
+		JButton btnNewButton_4 = new JButton("New button");
+		toolBar.add(btnNewButton_4);
 		
-		JButton btnNewButton_2 = new JButton("New button");
-		toolBar.add(btnNewButton_2);
+		JButton btnNewButton_5 = new JButton("New button");
+		toolBar.add(btnNewButton_5);
+		
+		JButton btnNewButton_6 = new JButton("New button");
+		toolBar.add(btnNewButton_6);
+		
+		JButton btnNewButton_7 = new JButton("New button");
+		toolBar.add(btnNewButton_7);
 		
 		JProgressBar progressBar = new JProgressBar();
 		springLayout.putConstraint(SpringLayout.NORTH, progressBar, 6, SpringLayout.SOUTH, splitPane);
