@@ -44,7 +44,6 @@ public class Main {
         JSplitPane splitPane = new JSplitPane();
         springLayout.putConstraint(SpringLayout.NORTH, splitPane, 90, SpringLayout.NORTH, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.SOUTH, splitPane, -47, SpringLayout.SOUTH, frame.getContentPane());
-        springLayout.putConstraint(SpringLayout.WEST, splitPane, 36, SpringLayout.WEST, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.EAST, splitPane, -10, SpringLayout.EAST, frame.getContentPane());
         splitPane.setDividerLocation(300); // Defina uma altura inicial para o JSplitPane
         splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -62,10 +61,10 @@ public class Main {
         splitPane.setRightComponent(textArea_1);
 
         JToolBar toolBar = new JToolBar();
-        toolBar.setFloatable(false);
         springLayout.putConstraint(SpringLayout.NORTH, toolBar, 10, SpringLayout.NORTH, frame.getContentPane());
-        springLayout.putConstraint(SpringLayout.WEST, toolBar, 0, SpringLayout.WEST, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.SOUTH, toolBar, -17, SpringLayout.NORTH, splitPane);
+        toolBar.setFloatable(false);
+        springLayout.putConstraint(SpringLayout.WEST, toolBar, 0, SpringLayout.WEST, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.EAST, toolBar, 0, SpringLayout.EAST, frame.getContentPane());
         frame.getContentPane().add(toolBar);
 
@@ -90,7 +89,8 @@ public class Main {
         springLayout.putConstraint(SpringLayout.NORTH, progressBar, 6, SpringLayout.SOUTH, splitPane);
         springLayout.putConstraint(SpringLayout.WEST, progressBar, 10, SpringLayout.WEST, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.SOUTH, progressBar, -10, SpringLayout.SOUTH, frame.getContentPane());
-        springLayout.putConstraint(SpringLayout.EAST, progressBar, 0, SpringLayout.EAST, splitPane);
+        springLayout.putConstraint(SpringLayout.EAST, progressBar, -10, SpringLayout.EAST, frame.getContentPane());
+        springLayout.putConstraint(SpringLayout.WEST, splitPane, 0, SpringLayout.WEST, progressBar);
         frame.getContentPane().add(progressBar);
     }
 }
