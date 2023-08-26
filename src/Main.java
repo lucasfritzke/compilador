@@ -80,9 +80,9 @@ public class Main {
 		
 		JProgressBar progressBar = new JProgressBar();
 		springLayout.putConstraint(SpringLayout.NORTH, progressBar, 6, SpringLayout.SOUTH, splitPane);
-		springLayout.putConstraint(SpringLayout.WEST, progressBar, -900, SpringLayout.EAST, splitPane);
+		springLayout.putConstraint(SpringLayout.WEST, progressBar, 10, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, progressBar, -10, SpringLayout.SOUTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, progressBar, -10, SpringLayout.EAST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, progressBar, 0, SpringLayout.EAST, splitPane);
 		frame.getContentPane().add(progressBar);
 	}
 }
