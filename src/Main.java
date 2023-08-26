@@ -12,6 +12,8 @@ import javax.swing.JProgressBar;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import javax.swing.JPanel;
+import java.awt.Font;
 
 public class Main {
 
@@ -65,31 +67,8 @@ public class Main {
         textScrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         textScrollPane_1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         splitPane.setRightComponent(textScrollPane_1);
-
-        JToolBar toolBar = new JToolBar();
-        springLayout.putConstraint(SpringLayout.NORTH, toolBar, 10, SpringLayout.NORTH, frame.getContentPane());
-        springLayout.putConstraint(SpringLayout.SOUTH, toolBar, -17, SpringLayout.NORTH, splitPane);
-        toolBar.setFloatable(false);
-        springLayout.putConstraint(SpringLayout.WEST, toolBar, 0, SpringLayout.WEST, frame.getContentPane());
-        springLayout.putConstraint(SpringLayout.EAST, toolBar, 0, SpringLayout.EAST, frame.getContentPane());
-        frame.getContentPane().add(toolBar);
-
-        JButton btnNewButton_3 = new JButton("");
         ImageIcon i = new ImageIcon(Main.class.getResource("/icons/novo.png"));
-        btnNewButton_3.setIcon(i);
-        toolBar.add(btnNewButton_3);
-
-        JButton btnNewButton_4 = new JButton("New button");
-        toolBar.add(btnNewButton_4);
-
-        JButton btnNewButton_5 = new JButton("New button");
-        toolBar.add(btnNewButton_5);
-
-        JButton btnNewButton_6 = new JButton("New button");
-        toolBar.add(btnNewButton_6);
-
-        JButton btnNewButton_7 = new JButton("New button");
-        toolBar.add(btnNewButton_7);
+        
 
         JProgressBar progressBar = new JProgressBar();
         springLayout.putConstraint(SpringLayout.NORTH, progressBar, 6, SpringLayout.SOUTH, splitPane);
@@ -98,5 +77,29 @@ public class Main {
         springLayout.putConstraint(SpringLayout.EAST, progressBar, -10, SpringLayout.EAST, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.WEST, splitPane, 0, SpringLayout.WEST, progressBar);
         frame.getContentPane().add(progressBar);
+        
+        JPanel panel = new JPanel();
+        springLayout.putConstraint(SpringLayout.NORTH, panel, -80, SpringLayout.NORTH, splitPane);
+        springLayout.putConstraint(SpringLayout.WEST, panel, 10, SpringLayout.WEST, frame.getContentPane());
+        springLayout.putConstraint(SpringLayout.SOUTH, panel, -6, SpringLayout.NORTH, splitPane);
+        springLayout.putConstraint(SpringLayout.EAST, panel, 0, SpringLayout.EAST, splitPane);
+        frame.getContentPane().add(panel);
+        panel.setLayout(null);
+        
+        JToolBar toolBar = new JToolBar();
+        toolBar.setBounds(0, 0, 910, 74);
+        panel.add(toolBar);
+        
+        JButton btnNewButton = new JButton("Novo [Crtl-N]");
+        btnNewButton.setBackground(new Color(255, 255, 255));
+        btnNewButton.setHorizontalAlignment(SwingConstants.TRAILING);
+        btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
+        btnNewButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+        
+        btnNewButton.setIcon(new ImageIcon(Main.class.getResource("/icons/Novo4.png")));
+        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
+       
+        toolBar.add(btnNewButton);
     }
 }
