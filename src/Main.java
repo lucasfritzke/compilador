@@ -58,6 +58,7 @@ public class Main {
 		frame.getContentPane().add(splitPane);
 		
 		JTextArea textArea = new JTextArea();
+		textArea.setBorder(new NumberedBorder());
 		textArea.setRows(20);
 		textArea.setColumns(20);
 		splitPane.setLeftComponent(textArea);
