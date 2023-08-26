@@ -38,7 +38,7 @@ public class Main {
 
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 944, 600);
+        frame.setBounds(100, 100, 949, 609);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         SpringLayout springLayout = new SpringLayout();
         frame.getContentPane().setLayout(springLayout);
