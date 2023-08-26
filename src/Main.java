@@ -6,7 +6,6 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
-import java.awt.TextArea;
 import javax.swing.JToolBar;
 import javax.swing.JProgressBar;
 import javax.swing.ImageIcon;
@@ -88,18 +87,88 @@ public class Main {
         
         JToolBar toolBar = new JToolBar();
         toolBar.setBounds(0, 0, 910, 74);
+        toolBar.setFloatable(false);
         panel.add(toolBar);
         
-        JButton btnNewButton = new JButton("Novo [Crtl-N]");
-        btnNewButton.setBackground(new Color(255, 255, 255));
-        btnNewButton.setHorizontalAlignment(SwingConstants.TRAILING);
-        btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
-        btnNewButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+        JButton btn1 = new JButton("Novo [crtl-n]");
+        btn1.setBackground(new Color(255, 255, 255));
+        btn1.setHorizontalAlignment(SwingConstants.TRAILING);
+        btn1.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn1.setVerticalAlignment(SwingConstants.BOTTOM);
+        btn1.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn1.setIcon(new ImageIcon(Main.class.getResource("/icons/novo.png")));
+        btn1.setFont(new Font("Tahoma", Font.PLAIN, 10));
         
-        btnNewButton.setIcon(new ImageIcon(Main.class.getResource("/icons/Novo4.png")));
-        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        JButton btn2 = new JButton("Abrir [crtl-o]");
+        btn2.setBackground(new Color(255, 255, 255));
+        btn2.setHorizontalAlignment(SwingConstants.TRAILING);
+        btn2.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn2.setVerticalAlignment(SwingConstants.BOTTOM);
+        btn2.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn2.setIcon(new ImageIcon(Main.class.getResource("/icons/abrir.png")));
+        btn2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        
+        JButton btn3 = new JButton("Salvar [crtl-s]");
+        btn3.setBackground(new Color(255, 255, 255));
+        btn3.setHorizontalAlignment(SwingConstants.TRAILING);
+        btn3.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn3.setVerticalAlignment(SwingConstants.BOTTOM);
+        btn3.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn3.setIcon(new ImageIcon(Main.class.getResource("/icons/salvar.png")));
+        btn3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        
+        JButton btn4 = new JButton("Copiar [crtl-c]");
+        btn4.setBackground(new Color(255, 255, 255));
+        btn4.setHorizontalAlignment(SwingConstants.TRAILING);
+        btn4.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn4.setVerticalAlignment(SwingConstants.BOTTOM);
+        btn4.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn4.setIcon(new ImageIcon(Main.class.getResource("/icons/copiar.png")));
+        btn4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        
+        JButton btn5 = new JButton("Colar [crtl-v]");
+        btn5.setBackground(new Color(255, 255, 255));
+        btn5.setHorizontalAlignment(SwingConstants.TRAILING);
+        btn5.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn5.setVerticalAlignment(SwingConstants.BOTTOM);
+        btn5.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn5.setIcon(new ImageIcon(Main.class.getResource("/icons/colar.png")));
+        btn5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        
+        JButton btn6 = new JButton("Recortar [crtl-x]");
+        btn6.setBackground(new Color(255, 255, 255));
+        btn6.setHorizontalAlignment(SwingConstants.TRAILING);
+        btn6.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn6.setVerticalAlignment(SwingConstants.BOTTOM);
+        btn6.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn6.setIcon(new ImageIcon(Main.class.getResource("/icons/recortar.png")));
+        btn6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        
+        JButton btn7 = new JButton("Compilar [F7]");
+        btn7.setBackground(new Color(255, 255, 255));
+        btn7.setHorizontalAlignment(SwingConstants.TRAILING);
+        btn7.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn7.setVerticalAlignment(SwingConstants.BOTTOM);
+        btn7.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn7.setIcon(new ImageIcon(Main.class.getResource("/icons/compilar.png")));
+        btn7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        
+        JButton btn8 = new JButton("Equipe [F1]");
+        btn8.setBackground(new Color(255, 255, 255));
+        btn8.setHorizontalAlignment(SwingConstants.TRAILING);
+        btn8.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn8.setVerticalAlignment(SwingConstants.BOTTOM);
+        btn8.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn8.setIcon(new ImageIcon(Main.class.getResource("/icons/equipe.png")));
+        btn8.setFont(new Font("Tahoma", Font.PLAIN, 10));
        
-        toolBar.add(btnNewButton);
+        toolBar.add(btn1);
+        toolBar.add(btn2);
+        toolBar.add(btn3);
+        toolBar.add(btn4);
+        toolBar.add(btn5);
+        toolBar.add(btn6);
+        toolBar.add(btn7);
+        toolBar.add(btn8);
     }
 }
