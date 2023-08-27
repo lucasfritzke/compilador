@@ -57,26 +57,27 @@ public class Main{
         springLayout.putConstraint(SpringLayout.NORTH, splitPane, 90, SpringLayout.NORTH, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.SOUTH, splitPane, -47, SpringLayout.SOUTH, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.EAST, splitPane, -10, SpringLayout.EAST, frame.getContentPane());
-        splitPane.setDividerLocation(300); // Defina uma altura inicial para o JSplitPane
+        splitPane.setDividerLocation(300); 
         splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
         frame.getContentPane().add(splitPane);
 
-        JTextArea textArea = new JTextArea(15, 30); // Defina mais linhas e colunas aqui
+        JTextArea textArea = new JTextArea(15, 30); 
         textArea.setName("CodeBlock");
         textArea.addKeyListener(keyH);
         util.addComponent(textArea);
         textArea.setBorder(new NumberedBorder());
         
-        JScrollPane textScrollPane = new JScrollPane(textArea); // Crie um JScrollPane para o JTextArea
+        JScrollPane textScrollPane = new JScrollPane(textArea); 
         textScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        textScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);// Mantenha a barra de rolagem sempre visível
-        splitPane.setLeftComponent(textScrollPane); // Adicione o JScrollPane ao SplitPane
+        textScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        splitPane.setLeftComponent(textScrollPane); 
 
         
         
         JTextArea textArea_1 = new JTextArea(10,20);
         textArea_1.setEditable(false);
         textArea_1.setName("MessageBlock");
+        util.addComponent(textArea_1);
         JScrollPane textScrollPane_1 = new JScrollPane(textArea_1);
         textScrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         textScrollPane_1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -178,6 +179,12 @@ public class Main{
         btn6.setFont(new Font("Tahoma", Font.PLAIN, 10));
         
         JButton btn7 = new JButton("Compilar [F7]");
+        btn7.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		util.metodoCompilar();
+        	}
+        });
         btn7.setBackground(new Color(255, 255, 255));
         btn7.setHorizontalAlignment(SwingConstants.TRAILING);
         btn7.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -187,6 +194,11 @@ public class Main{
         btn7.setFont(new Font("Tahoma", Font.PLAIN, 10));
         
         JButton btn8 = new JButton("Equipe [F1]");
+        btn8.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		util.metodoMostraEquipe();
+        	}
+        });
         btn8.setBackground(new Color(255, 255, 255));
         btn8.setHorizontalAlignment(SwingConstants.TRAILING);
         btn8.setHorizontalTextPosition(SwingConstants.CENTER);

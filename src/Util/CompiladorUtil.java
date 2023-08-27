@@ -133,7 +133,18 @@ public class CompiladorUtil {
         }
         
     }
-
+    
+    public void metodoCompilar() {
+    	JTextArea m = (JTextArea) geComponentByName("MessageBlock");
+    	m.setText("Compilação de programas ainda não foi implementada!");
+    	
+    }
+    
+    public void metodoMostraEquipe() {
+    	JTextArea m = (JTextArea) geComponentByName("MessageBlock");
+    	m.setText("Equipe:Guilherme W. Back, João Victor Schmidt e Lucas Fritzke");
+    	
+    }
 
     public Component geComponentByName(String name){
           for(int i = 0; i < components.size(); i++){
