@@ -4,19 +4,30 @@ import javax.swing.JFrame;
 import javax.swing.SpringLayout;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
-import javax.swing.JProgressBar;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+
+import Util.CompiladorUtil;
+import Util.KeyHandler;
+
 import java.awt.Color;
+
 import javax.swing.JPanel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Main {
+
+public class Main{
 
     private JFrame frame;
+    private CompiladorUtil util = new CompiladorUtil();
+    private KeyHandler keyH = new KeyHandler(util);
+    
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -51,6 +62,9 @@ public class Main {
         frame.getContentPane().add(splitPane);
 
         JTextArea textArea = new JTextArea(15, 30); // Defina mais linhas e colunas aqui
+        textArea.setName("CodeBlock");
+        textArea.addKeyListener(keyH);
+        util.addComponent(textArea);
         textArea.setBorder(new NumberedBorder());
         
         JScrollPane textScrollPane = new JScrollPane(textArea); // Crie um JScrollPane para o JTextArea
@@ -62,6 +76,7 @@ public class Main {
         
         JTextArea textArea_1 = new JTextArea(10,20);
         textArea_1.setEditable(false);
+        textArea_1.setName("MessageBlock");
         JScrollPane textScrollPane_1 = new JScrollPane(textArea_1);
         textScrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         textScrollPane_1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -69,7 +84,10 @@ public class Main {
         ImageIcon i = new ImageIcon(Main.class.getResource("/icons/novo.png"));
         
 
-        JProgressBar progressBar = new JProgressBar();
+        JTextField progressBar = new JTextField();
+        progressBar.setName("StatusBar");
+        progressBar.setEditable(false);
+        util.addComponent(progressBar);
         springLayout.putConstraint(SpringLayout.NORTH, progressBar, 6, SpringLayout.SOUTH, splitPane);
         springLayout.putConstraint(SpringLayout.WEST, progressBar, 10, SpringLayout.WEST, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.SOUTH, progressBar, -10, SpringLayout.SOUTH, frame.getContentPane());
@@ -98,6 +116,11 @@ public class Main {
         btn1.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn1.setIcon(new ImageIcon(Main.class.getResource("/icons/novo.png")));
         btn1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        btn1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                util.metodoNovo();
+            }
+        });
         
         JButton btn2 = new JButton("Abrir [crtl-o]");
         btn2.setBackground(new Color(255, 255, 255));
@@ -107,6 +130,12 @@ public class Main {
         btn2.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn2.setIcon(new ImageIcon(Main.class.getResource("/icons/abrir.png")));
         btn2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        btn2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+              util.metodoAbrir();
+            }
+            
+        });
         
         JButton btn3 = new JButton("Salvar [crtl-s]");
         btn3.setBackground(new Color(255, 255, 255));
