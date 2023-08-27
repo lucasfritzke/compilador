@@ -2,10 +2,14 @@ package Util;
 
 import java.awt.Component;
 import java.awt.FileDialog;
+import java.awt.TextArea;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -30,8 +34,7 @@ public class CompiladorUtil {
 
         jTextArea = (JTextArea) geComponentByName("CodeBlock");
         jTextArea.setText("");
-    
-        
+
     }
 
     public void metodoAbrir(){
@@ -66,6 +69,71 @@ public class CompiladorUtil {
             }
         }
     }
+
+    public void metodoSalvar(){
+
+        if(path == null){
+            final JFileChooser fc = new JFileChooser();
+            int returnVal = fc.showSaveDialog(new JFrame());
+
+            if(returnVal == JFileChooser.APPROVE_OPTION){
+                try {
+                    File file = fc.getSelectedFile();
+                        if(file.createNewFile()){
+                        path = file.getAbsolutePath();
+
+                        JTextArea textArea = (JTextArea) geComponentByName("CodeBlock");
+                        String text = textArea.getText();
+                        JTextField jTextField = (JTextField) geComponentByName("StatusBar");
+                        jTextField.setText(path);
+
+                        String[] splitString = text.split("\n");
+
+                        FileWriter fw = new FileWriter(file);
+                        BufferedWriter out = new BufferedWriter(fw);
+                        for(int i = 0; i < splitString.length; i++){
+                            out.write(splitString[i]);
+                        }
+                        out.flush();
+                        out.close();
+                    }
+                
+                    
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }else{
+            File file = new File(path);
+            if(file.exists()){
+
+                JTextArea textArea = (JTextArea) geComponentByName("CodeBlock");
+                String text = textArea.getText();
+                JTextField jTextField = (JTextField) geComponentByName("StatusBar");
+                jTextField.setText(path);
+
+                String[] splitString = text.split("\n");
+
+                try {
+                    FileWriter fw = new FileWriter(file);
+                    BufferedWriter out = new BufferedWriter(fw);
+                    for(int i = 0; i < splitString.length; i++){
+                        out.write(splitString[i] + "\n");
+                    }
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                
+            }
+
+        }
+        
+    }
+
 
     public Component geComponentByName(String name){
           for(int i = 0; i < components.size(); i++){

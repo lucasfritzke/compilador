@@ -13,6 +13,7 @@ public class KeyHandler implements KeyListener {
     private boolean keyNPressed = false;
     private boolean keyCTRLPressed = false;
     private boolean keyOPressed = false;
+    private boolean keySPressed = false;
 
     public KeyHandler(CompiladorUtil util){
         this.util = util;
@@ -29,8 +30,16 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_O){
             keyOPressed = true;
         }
+        if(code == KeyEvent.VK_S){
+            keySPressed = true;
+        }
 
         //Combinação de teclas
+        if(keyCTRLPressed == true && keySPressed == true){
+            keyCTRLPressed = false;
+            keySPressed = false;
+            util.metodoSalvar();
+        }
         if(keyOPressed == true && keyCTRLPressed == true){
             keyOPressed = false;
             keyCTRLPressed = false;
@@ -53,6 +62,9 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_O){
             keyOPressed = false;
+        }
+        if(code == KeyEvent.VK_S){
+            keySPressed = false;
         }
 
     }

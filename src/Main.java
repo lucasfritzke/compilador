@@ -134,7 +134,6 @@ public class Main{
             public void actionPerformed(ActionEvent arg0) {
               util.metodoAbrir();
             }
-            
         });
         
         JButton btn3 = new JButton("Salvar [crtl-s]");
@@ -145,6 +144,11 @@ public class Main{
         btn3.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn3.setIcon(new ImageIcon(Main.class.getResource("/icons/salvar.png")));
         btn3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        btn3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                util.metodoSalvar();
+            }
+        });
         
         JButton btn4 = new JButton("Copiar [crtl-c]");
         btn4.setBackground(new Color(255, 255, 255));
