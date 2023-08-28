@@ -159,6 +159,11 @@ public class Main{
         btn4.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn4.setIcon(new ImageIcon(Main.class.getResource("/icons/copiar.png")));
         btn4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        btn4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                util.metodoCopiar();
+            }
+        });
         
         JButton btn5 = new JButton("Colar [crtl-v]");
         btn5.setBackground(new Color(255, 255, 255));
@@ -168,6 +173,11 @@ public class Main{
         btn5.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn5.setIcon(new ImageIcon(Main.class.getResource("/icons/colar.png")));
         btn5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        btn5.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                util.metodoColar();
+            }
+        });
         
         JButton btn6 = new JButton("Recortar [crtl-x]");
         btn6.setBackground(new Color(255, 255, 255));

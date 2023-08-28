@@ -2,7 +2,8 @@ package Util;
 
 import java.awt.Component;
 import java.awt.FileDialog;
-import java.awt.TextArea;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,11 +14,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.Caret;
+
 
 public class CompiladorUtil {
     
     private ArrayList components = new ArrayList();
     private String path = null;
+    private String copiedText = null;
 
     public void addComponent(Component comp){
         components.add(comp);
@@ -29,10 +33,10 @@ public class CompiladorUtil {
         JTextField jTextField = new JTextField();
         path = null;
 
-        jTextField = (JTextField) geComponentByName("StatusBar");
+        jTextField = (JTextField) getComponentByName("StatusBar");
         jTextField.setText("");
 
-        jTextArea = (JTextArea) geComponentByName("CodeBlock");
+        jTextArea = (JTextArea) getComponentByName("CodeBlock");
         jTextArea.setText("");
 
     }
@@ -57,10 +61,10 @@ public class CompiladorUtil {
                 while(myReader.hasNextLine()){
                     data += myReader.nextLine() + "\n";
                 }
-                JTextField jTextField = (JTextField) geComponentByName("StatusBar");
+                JTextField jTextField = (JTextField) getComponentByName("StatusBar");
                 jTextField.setText(path); 
 
-                JTextArea jTextArea = (JTextArea) geComponentByName("CodeBlock");
+                JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
                 jTextArea.setText(data);
                 myReader.close();
 
@@ -82,9 +86,9 @@ public class CompiladorUtil {
                         if(file.createNewFile()){
                         path = file.getAbsolutePath();
 
-                        JTextArea textArea = (JTextArea) geComponentByName("CodeBlock");
+                        JTextArea textArea = (JTextArea) getComponentByName("CodeBlock");
                         String text = textArea.getText();
-                        JTextField jTextField = (JTextField) geComponentByName("StatusBar");
+                        JTextField jTextField = (JTextField) getComponentByName("StatusBar");
                         jTextField.setText(path);
 
                         String[] splitString = text.split("\n");
@@ -108,9 +112,9 @@ public class CompiladorUtil {
             File file = new File(path);
             if(file.exists()){
 
-                JTextArea textArea = (JTextArea) geComponentByName("CodeBlock");
+                JTextArea textArea = (JTextArea) getComponentByName("CodeBlock");
                 String text = textArea.getText();
-                JTextField jTextField = (JTextField) geComponentByName("StatusBar");
+                JTextField jTextField = (JTextField) getComponentByName("StatusBar");
                 jTextField.setText(path);
 
                 String[] splitString = text.split("\n");
@@ -135,18 +139,72 @@ public class CompiladorUtil {
     }
     
     public void metodoCompilar() {
-    	JTextArea m = (JTextArea) geComponentByName("MessageBlock");
+    	JTextArea m = (JTextArea) getComponentByName("MessageBlock");
     	m.setText("Compilação de programas ainda não foi implementada!");
     	
     }
     
     public void metodoMostraEquipe() {
-    	JTextArea m = (JTextArea) geComponentByName("MessageBlock");
+    	JTextArea m = (JTextArea) getComponentByName("MessageBlock");
     	m.setText("Equipe:Guilherme W. Back, João Victor Schmidt e Lucas Fritzke");
     	
     }
 
-    public Component geComponentByName(String name){
+    public void metodoCopiar() {
+        JTextArea jTextArea1 = (JTextArea) getComponentByName("CodeBlock");
+        JTextArea jTextArea2 = (JTextArea) getComponentByName("MessageBlock");
+        
+        String selected1 = jTextArea1.getSelectedText();
+        String selected2 = jTextArea2.getSelectedText();
+        
+        if(selected1 != null && !selected1.equals("") ){
+            copiedText = selected1;
+            StringSelection stringSelection = new StringSelection(selected1);
+            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
+        else if(selected2 != null && !selected2.equals("")){
+            copiedText = selected2;
+            StringSelection stringSelection = new StringSelection(selected2);
+            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
+    }
+
+    public void metodoColar(){
+        JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
+        int caret = jTextArea.getCaretPosition();
+        char[] charArr = jTextArea.getText().toCharArray();
+        charArr = novoCharArr(charArr, caret);
+        String text = new String(charArr);
+        jTextArea.setText(text);
+
+    }
+
+    //TODO
+    private char[] novoCharArr(char[] charArr, int caret){
+        char[] novoCharArr = new char[charArr.length + copiedText.length()];
+        //populating the vector
+        for(int i = 0; i < charArr.length; i++){
+            novoCharArr[i] = charArr[i];
+        }
+
+        //setting up the string
+        char[] text = copiedText.toCharArray();
+        for(int i = caret, z = 0; i < novoCharArr.length; i++, z++){
+            if(novoCharArr[i] == 0 && z < text.length){
+                novoCharArr[i] = text[z];
+            }
+            else if(i+1 < novoCharArr.length && novoCharArr[i] != 0 && z < text.length){
+                novoCharArr[i+1] = novoCharArr[i];
+                novoCharArr[i] = text[z];
+            }
+        }
+        return novoCharArr;
+    }
+
+
+    public Component getComponentByName(String name){
           for(int i = 0; i < components.size(); i++){
             Component c = (Component) components.get(i); 
             if(c.getName().equals(name)){
@@ -155,4 +213,5 @@ public class CompiladorUtil {
         }
         return null;
     }
+
 }
