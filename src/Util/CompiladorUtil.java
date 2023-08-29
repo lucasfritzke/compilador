@@ -14,7 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.Caret;
+
 
 
 public class CompiladorUtil {
@@ -31,7 +31,7 @@ public class CompiladorUtil {
         //Inicializa para comporar classes
         JTextArea jTextArea = new JTextArea();
         JTextField jTextField = new JTextField();
-        path = null;
+        this.path = null;
 
         jTextField = (JTextField) getComponentByName("StatusBar");
         jTextField.setText("");
@@ -45,7 +45,9 @@ public class CompiladorUtil {
         //Checando se o caminho foi alterado
         String pathTemp = null;
         FileDialog fd = new FileDialog(new JFrame());
+        fd.setFile("*.txt");
         fd.setVisible(true);
+        
         File[] f = fd.getFiles();
 
         if(f.length > 0){
@@ -53,7 +55,7 @@ public class CompiladorUtil {
         }
 
         if(pathTemp != null && !pathTemp.equals(path)){
-            path = pathTemp;
+            this.path = pathTemp;
             try {
                 File file = new File(path);
                 Scanner myReader = new Scanner(file);
@@ -75,34 +77,34 @@ public class CompiladorUtil {
     }
 
     public void metodoSalvar(){
-
-        if(path == null){
+        if(this.path == null){
             final JFileChooser fc = new JFileChooser();
             int returnVal = fc.showSaveDialog(new JFrame());
 
             if(returnVal == JFileChooser.APPROVE_OPTION){
                 try {
                     File file = fc.getSelectedFile();
-                        if(file.createNewFile()){
-                        path = file.getAbsolutePath();
-
-                        JTextArea textArea = (JTextArea) getComponentByName("CodeBlock");
-                        String text = textArea.getText();
-                        JTextField jTextField = (JTextField) getComponentByName("StatusBar");
-                        jTextField.setText(path);
-
-                        String[] splitString = text.split("\n");
-
-                        FileWriter fw = new FileWriter(file);
-                        BufferedWriter out = new BufferedWriter(fw);
-                        for(int i = 0; i < splitString.length; i++){
-                            out.write(splitString[i]);
-                        }
-                        out.flush();
-                        out.close();
+                   
+                    if(!file.getName().endsWith(".txt")){
+                        File rename = new File(file.getAbsolutePath().replace('\\', '/') + ".txt");
+                        file = rename;
                     }
-                
-                    
+                    file.createNewFile();    
+                    this.path = file.getAbsolutePath();
+
+                    JTextArea textArea = (JTextArea) getComponentByName("CodeBlock");
+                    String text = textArea.getText();
+                    JTextField jTextField = (JTextField) getComponentByName("StatusBar");
+                    jTextField.setText(path);
+
+                    String[] splitString = text.split("\n");
+                    FileWriter fw = new FileWriter(file);
+                    BufferedWriter out = new BufferedWriter(fw);
+                    for(int i = 0; i < splitString.length; i++){
+                        out.write(splitString[i]);
+                    }
+                    out.flush();
+                    out.close();
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -156,22 +158,28 @@ public class CompiladorUtil {
         
         String selected1 = jTextArea1.getSelectedText();
         String selected2 = jTextArea2.getSelectedText();
-        
+             
         if(selected1 != null && !selected1.equals("") ){
-            copiedText = selected1;
+            this.copiedText = selected1;
             StringSelection stringSelection = new StringSelection(selected1);
             java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
         }
         else if(selected2 != null && !selected2.equals("")){
-            copiedText = selected2;
+            this.copiedText = selected2;
             StringSelection stringSelection = new StringSelection(selected2);
             java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
         }
+       
+       
     }
 
     public void metodoColar(){
+        if(this.copiedText == null){
+            return;
+        }
+
         JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
         int caret = jTextArea.getCaretPosition();
         char[] charArr = jTextArea.getText().toCharArray();
@@ -183,6 +191,7 @@ public class CompiladorUtil {
 
     //TODO
     private char[] novoCharArr(char[] charArr, int caret){
+
         char[] novoCharArr = new char[charArr.length + copiedText.length()];
         //populating the vector
         for(int i = 0; i < charArr.length; i++){
@@ -201,6 +210,41 @@ public class CompiladorUtil {
             }
         }
         return novoCharArr;
+    }
+
+    public void metodoRecortar(){
+        JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
+        int caret = jTextArea.getCaretPosition();
+        char[] selectedText = jTextArea.getSelectedText() != null ?  jTextArea.getSelectedText().toCharArray() : null;
+        if(selectedText ==  null){
+            return;
+        }
+        char[] allText = jTextArea.getText().toCharArray();
+        
+        if(allText.length == selectedText.length){
+            String newText = new String(allText);
+            this.copiedText = newText;
+            jTextArea.setText("");
+        }
+        else{
+            char[] newChar = new char[allText.length - selectedText.length];
+
+            for(int i = 0; i < allText.length; i++){
+                if(caret>i){
+                    newChar[i] = allText[i];
+                }else{
+                    for(int z = newChar.length-1;  z>=caret; z--){
+                        newChar[z] = allText[selectedText.length + z];
+                    }
+                    break;
+                }
+            }
+
+            String newText = new String(newChar);
+            jTextArea.setText(newText);
+            newText = new String(selectedText);
+            this.copiedText = newText;
+        }
     }
 
 

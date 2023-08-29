@@ -15,6 +15,7 @@ import Util.CompiladorUtil;
 import Util.KeyHandler;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import java.awt.Font;
@@ -48,6 +49,7 @@ public class Main{
 
     private void initialize() {
         frame = new JFrame();
+        frame.setMinimumSize(new Dimension(910, 600));
         frame.setBounds(100, 100, 949, 609);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         SpringLayout springLayout = new SpringLayout();
@@ -187,6 +189,11 @@ public class Main{
         btn6.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn6.setIcon(new ImageIcon(Main.class.getResource("/icons/recortar.png")));
         btn6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        btn6.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                util.metodoRecortar();
+            }
+        });
         
         JButton btn7 = new JButton("Compilar [F7]");
         btn7.addActionListener(new ActionListener() {
