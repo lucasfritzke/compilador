@@ -39,6 +39,9 @@ public class CompiladorUtil {
         jTextArea = (JTextArea) getComponentByName("CodeBlock");
         jTextArea.setText("");
 
+        jTextArea = (JTextArea) getComponentByName("MessageBlock");
+        jTextArea.setText("");
+
     }
 
     public void metodoAbrir(){
@@ -182,35 +185,30 @@ public class CompiladorUtil {
 
         JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
         int caret = jTextArea.getCaretPosition();
-        char[] charArr = jTextArea.getText().toCharArray();
-        charArr = novoCharArr(charArr, caret);
-        String text = new String(charArr);
+
+        char[] selectedText = copiedText.toCharArray();
+        char[] textArr = jTextArea.getText().toCharArray();
+        char[] newTextArr = new char[textArr.length + selectedText.length];
+
+        //populate the new array ,
+        for(int i = 0; i < textArr.length; i++){
+            newTextArr[i] = textArr[i];
+        }
+
+        for(int i = caret, z = 0; i < newTextArr.length; i++, z++){
+            if(z<selectedText.length){
+                for(int x = newTextArr.length-1; x > i; x--){
+                    newTextArr[x] = newTextArr[x-1]; 
+                }
+                newTextArr[i] =  selectedText[z];
+            }
+        }
+
+        String text = new String(newTextArr);
         jTextArea.setText(text);
 
     }
 
-    //TODO
-    private char[] novoCharArr(char[] charArr, int caret){
-
-        char[] novoCharArr = new char[charArr.length + copiedText.length()];
-        //populating the vector
-        for(int i = 0; i < charArr.length; i++){
-            novoCharArr[i] = charArr[i];
-        }
-
-        //setting up the string
-        char[] text = copiedText.toCharArray();
-        for(int i = caret, z = 0; i < novoCharArr.length; i++, z++){
-            if(novoCharArr[i] == 0 && z < text.length){
-                novoCharArr[i] = text[z];
-            }
-            else if(i+1 < novoCharArr.length && novoCharArr[i] != 0 && z < text.length){
-                novoCharArr[i+1] = novoCharArr[i];
-                novoCharArr[i] = text[z];
-            }
-        }
-        return novoCharArr;
-    }
 
     public void metodoRecortar(){
         JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
@@ -224,12 +222,15 @@ public class CompiladorUtil {
         if(allText.length == selectedText.length){
             String newText = new String(allText);
             this.copiedText = newText;
+            StringSelection stringSelection = new StringSelection(this.copiedText);
+            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
             jTextArea.setText("");
         }
         else{
             char[] newChar = new char[allText.length - selectedText.length];
 
-            for(int i = 0; i < allText.length; i++){
+            for(int i = 0; i < allText.length - 1; i++){
                 if(caret>i){
                     newChar[i] = allText[i];
                 }else{
@@ -244,9 +245,11 @@ public class CompiladorUtil {
             jTextArea.setText(newText);
             newText = new String(selectedText);
             this.copiedText = newText;
+            StringSelection stringSelection = new StringSelection(newText);
+            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
         }
     }
-
 
     public Component getComponentByName(String name){
           for(int i = 0; i < components.size(); i++){
