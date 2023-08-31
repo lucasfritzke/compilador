@@ -48,9 +48,9 @@ public class Main{
     }
 
     private void initialize() {
-        frame = new JFrame();
+    	frame = new JFrame();
+        frame.setBounds(100, 100, 955, 623);
         frame.setMinimumSize(new Dimension(910, 600));
-        frame.setBounds(100, 100, 949, 609);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         SpringLayout springLayout = new SpringLayout();
         frame.getContentPane().setLayout(springLayout);
@@ -97,19 +97,17 @@ public class Main{
         springLayout.putConstraint(SpringLayout.EAST, progressBar, -10, SpringLayout.EAST, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.WEST, splitPane, 0, SpringLayout.WEST, progressBar);
         frame.getContentPane().add(progressBar);
-        
-        JPanel panel = new JPanel();
-        springLayout.putConstraint(SpringLayout.NORTH, panel, -80, SpringLayout.NORTH, splitPane);
-        springLayout.putConstraint(SpringLayout.WEST, panel, 10, SpringLayout.WEST, frame.getContentPane());
-        springLayout.putConstraint(SpringLayout.SOUTH, panel, -6, SpringLayout.NORTH, splitPane);
-        springLayout.putConstraint(SpringLayout.EAST, panel, 0, SpringLayout.EAST, splitPane);
-        frame.getContentPane().add(panel);
-        panel.setLayout(null);
+        SpringLayout sl_panel = new SpringLayout();
         
         JToolBar toolBar = new JToolBar();
-        toolBar.setBounds(0, 0, 910, 74);
+        toolBar.setMinimumSize(new Dimension(900,70));
+        springLayout.putConstraint(SpringLayout.NORTH, toolBar, 10, SpringLayout.NORTH, frame.getContentPane());
+        springLayout.putConstraint(SpringLayout.WEST, toolBar, 0, SpringLayout.WEST, splitPane);
+        springLayout.putConstraint(SpringLayout.SOUTH, toolBar, -6, SpringLayout.NORTH, splitPane);
+        springLayout.putConstraint(SpringLayout.EAST, toolBar, 0, SpringLayout.EAST, splitPane);
         toolBar.setFloatable(false);
-        panel.add(toolBar);
+        frame.getContentPane().add(toolBar);
+       
         
         JButton btn1 = new JButton("Novo [crtl-n]");
         btn1.setBackground(new Color(255, 255, 255));
@@ -190,10 +188,12 @@ public class Main{
         btn6.setIcon(new ImageIcon(Main.class.getResource("/icons/recortar.png")));
         btn6.setFont(new Font("Tahoma", Font.PLAIN, 10));
         btn6.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                util.metodoRecortar();
-            }
-        });
+			
+			public void actionPerformed(ActionEvent e) {
+				util.metodoRecortar();
+				
+			}
+		});
         
         JButton btn7 = new JButton("Compilar [F7]");
         btn7.addActionListener(new ActionListener() {
