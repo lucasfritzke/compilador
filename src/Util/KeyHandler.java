@@ -101,6 +101,12 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_S){
             keySPressed = false;
         }
+        if(code == KeyEvent.VK_C){
+            keyCPressed = false;
+        }
+        if(code == KeyEvent.VK_X){
+            keyXPressed = false;
+        }
 
     }
 

@@ -178,7 +178,7 @@ public class CompiladorUtil {
        
     }
 
-    public void metodoColar(){
+    public void metodoColar(){ 
         if(this.copiedText == null){
             return;
         }
@@ -195,13 +195,11 @@ public class CompiladorUtil {
             newTextArr[i] = textArr[i];
         }
 
-        for(int i = caret, z = 0; i < newTextArr.length; i++, z++){
-            if(z<selectedText.length){
-                for(int x = newTextArr.length-1; x > i; x--){
-                    newTextArr[x] = newTextArr[x-1]; 
-                }
-                newTextArr[i] =  selectedText[z];
+        for(int i = caret, z = 0; z<selectedText.length; i++, z++){
+            for(int x = newTextArr.length-1; x > i; x--){
+                newTextArr[x] = newTextArr[x-1]; 
             }
+            newTextArr[i] =  selectedText[z];
         }
 
         String text = new String(newTextArr);
