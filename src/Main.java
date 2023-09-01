@@ -17,7 +17,6 @@ import Util.KeyHandler;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.JPanel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -100,11 +99,11 @@ public class Main{
         SpringLayout sl_panel = new SpringLayout();
         
         JToolBar toolBar = new JToolBar();
+        springLayout.putConstraint(SpringLayout.EAST, toolBar, 0, SpringLayout.EAST, splitPane);
         toolBar.setMinimumSize(new Dimension(900,70));
         springLayout.putConstraint(SpringLayout.NORTH, toolBar, 10, SpringLayout.NORTH, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.WEST, toolBar, 0, SpringLayout.WEST, splitPane);
         springLayout.putConstraint(SpringLayout.SOUTH, toolBar, -6, SpringLayout.NORTH, splitPane);
-        springLayout.putConstraint(SpringLayout.EAST, toolBar, 0, SpringLayout.EAST, splitPane);
         toolBar.setFloatable(false);
         frame.getContentPane().add(toolBar);
        
