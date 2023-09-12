@@ -1086,10 +1086,16 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Caractere n�o esperado",
+        "Símbolo inválido",
         "",
         "",
         "Erro identificando string",
+        "", //5
+        "",
+        "",
+        "",
+        "",
+        "", //10
         "",
         "",
         "",
@@ -1099,32 +1105,26 @@ public interface ScannerConstants
         "",
         "",
         "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        "",//20
         "Erro identificando <ignorar>",
         "Erro identificando identificador",
         "",
         "",
-        "",
+        "",//25
         "",
         "",
         "",
         "Erro identificando string",
-        "Erro identificando float",
+        "Erro identificando float",//30
         "",
         "",
         "Erro identificando identificador",
         "",
-        "",
+        "",//35
         "",
         "Erro identificando float",
         "",
-        "",
+        "",//39
         ""
     };
 

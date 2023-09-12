@@ -78,6 +78,8 @@ public class Main{
         JTextArea textArea_1 = new JTextArea(10,20);
         textArea_1.setEditable(false);
         textArea_1.setName("MessageBlock");
+        Font fonteMonoespaco = new Font("Courier New", Font.PLAIN, 12); // Substitua "Courier New" pela fonte monoespacial desejada
+        textArea_1.setFont(fonteMonoespaco);
         util.addComponent(textArea_1);
         JScrollPane textScrollPane_1 = new JScrollPane(textArea_1);
         textScrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -222,6 +224,7 @@ public class Main{
         btn8.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn8.setIcon(new ImageIcon(Main.class.getResource("/icons/equipe.png")));
         btn8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        
        
         toolBar.add(btn1);
         toolBar.add(btn2);

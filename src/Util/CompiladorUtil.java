@@ -1,7 +1,10 @@
 package Util;
 
+import java.util.Formatter;
+import java.util.Locale;
 import java.awt.Component;
 import java.awt.FileDialog;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.io.BufferedWriter;
@@ -14,290 +17,298 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
 import lexico.LexicalError;
 import lexico.Lexico;
 import lexico.Token;
 
-
-
 public class CompiladorUtil {
-    
-    private ArrayList components = new ArrayList();
-    private String path = null;
-    private String copiedText = null;
 
-    public void addComponent(Component comp){
-        components.add(comp);
-    }
+	private ArrayList components = new ArrayList();
+	private String path = null;
+	private String copiedText = null;
 
-    public void metodoNovo(){
-        //Inicializa para comporar classes
-        JTextArea jTextArea = new JTextArea();
-        JTextField jTextField = new JTextField();
-        this.path = null;
+	public void addComponent(Component comp) {
+		components.add(comp);
+	}
 
-        jTextField = (JTextField) getComponentByName("StatusBar");
-        jTextField.setText("");
+	public void metodoNovo() {
+		// Inicializa para comporar classes
+		JTextArea jTextArea = new JTextArea();
+		JTextField jTextField = new JTextField();
+		this.path = null;
 
-        jTextArea = (JTextArea) getComponentByName("CodeBlock");
-        jTextArea.setText("");
+		jTextField = (JTextField) getComponentByName("StatusBar");
+		jTextField.setText("");
 
-        jTextArea = (JTextArea) getComponentByName("MessageBlock");
-        jTextArea.setText("");
+		jTextArea = (JTextArea) getComponentByName("CodeBlock");
+		jTextArea.setText("");
 
-    }
+		jTextArea = (JTextArea) getComponentByName("MessageBlock");
+		jTextArea.setText("");
 
-    public void metodoAbrir(){
-        //Checando se o caminho foi alterado
-        String pathTemp = null;
-        FileDialog fd = new FileDialog(new JFrame());
-        fd.setFile("*.txt");
-        fd.setVisible(true);
-        
-        File[] f = fd.getFiles();
+	}
 
-        if(f.length > 0){
-            pathTemp = fd.getFiles()[0].getAbsolutePath();
-        }
+	public void metodoAbrir() {
+		// Checando se o caminho foi alterado
+		String pathTemp = null;
+		FileDialog fd = new FileDialog(new JFrame());
+		fd.setFile("*.txt");
+		fd.setVisible(true);
 
-        if(pathTemp != null && !pathTemp.equals(path)){
-            this.path = pathTemp;
-            try {
-                File file = new File(path);
-                Scanner myReader = new Scanner(file);
-                String data = "";
-                while(myReader.hasNextLine()){
-                    data += myReader.nextLine() + "\n";
-                }
-                JTextField jTextField = (JTextField) getComponentByName("StatusBar");
-                jTextField.setText(path); 
+		File[] f = fd.getFiles();
 
-                JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
-                jTextArea.setText(data);
-                myReader.close();
+		if (f.length > 0) {
+			pathTemp = fd.getFiles()[0].getAbsolutePath();
+		}
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+		if (pathTemp != null && !pathTemp.equals(path)) {
+			this.path = pathTemp;
+			try {
+				File file = new File(path);
+				Scanner myReader = new Scanner(file);
+				String data = "";
+				while (myReader.hasNextLine()) {
+					data += myReader.nextLine() + "\n";
+				}
+				JTextField jTextField = (JTextField) getComponentByName("StatusBar");
+				jTextField.setText(path);
 
-    public void metodoSalvar(){
-        if(this.path == null){
-            final JFileChooser fc = new JFileChooser();
-            int returnVal = fc.showSaveDialog(new JFrame());
+				JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
+				jTextArea.setText(data);
+				myReader.close();
 
-            if(returnVal == JFileChooser.APPROVE_OPTION){
-                try {
-                    File file = fc.getSelectedFile();
-                   
-                    if(!file.getName().endsWith(".txt")){
-                        File rename = new File(file.getAbsolutePath().replace('\\', '/') + ".txt");
-                        file = rename;
-                    }
-                    file.createNewFile();    
-                    this.path = file.getAbsolutePath();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-                    JTextArea textArea = (JTextArea) getComponentByName("CodeBlock");
-                    String text = textArea.getText();
-                    JTextField jTextField = (JTextField) getComponentByName("StatusBar");
-                    jTextField.setText(path);
+	public void metodoSalvar() {
+		if (this.path == null) {
+			final JFileChooser fc = new JFileChooser();
+			int returnVal = fc.showSaveDialog(new JFrame());
 
-                    String[] splitString = text.split("\n");
-                    FileWriter fw = new FileWriter(file);
-                    BufferedWriter out = new BufferedWriter(fw);
-                    for(int i = 0; i < splitString.length; i++){
-                        out.write(splitString[i]);
-                    }
-                    out.flush();
-                    out.close();
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				try {
+					File file = fc.getSelectedFile();
 
-        }else{
-            File file = new File(path);
-            if(file.exists()){
+					if (!file.getName().endsWith(".txt")) {
+						File rename = new File(file.getAbsolutePath().replace('\\', '/') + ".txt");
+						file = rename;
+					}
+					file.createNewFile();
+					this.path = file.getAbsolutePath();
 
-                JTextArea textArea = (JTextArea) getComponentByName("CodeBlock");
-                String text = textArea.getText();
-                JTextField jTextField = (JTextField) getComponentByName("StatusBar");
-                jTextField.setText(path);
+					JTextArea textArea = (JTextArea) getComponentByName("CodeBlock");
+					String text = textArea.getText();
+					JTextField jTextField = (JTextField) getComponentByName("StatusBar");
+					jTextField.setText(path);
 
-                String[] splitString = text.split("\n");
+					String[] splitString = text.split("\n");
+					FileWriter fw = new FileWriter(file);
+					BufferedWriter out = new BufferedWriter(fw);
+					for (int i = 0; i < splitString.length; i++) {
+						out.write(splitString[i]);
+					}
+					out.flush();
+					out.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 
-                try {
-                    FileWriter fw = new FileWriter(file);
-                    BufferedWriter out = new BufferedWriter(fw);
-                    for(int i = 0; i < splitString.length; i++){
-                        out.write(splitString[i] + "\n");
-                    }
-                    out.flush();
-                    out.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                
-            }
+		} else {
+			File file = new File(path);
+			if (file.exists()) {
 
-        }
-        
-    }
-    
-    public void metodoCompilar() {
-    	JTextArea messageBlock = (JTextArea) getComponentByName("MessageBlock");
-    	JTextArea codeBlock = (JTextArea) getComponentByName("CodeBlock");
-    	Lexico lexico = new Lexico();
-    	   lexico.setInput(codeBlock.getText());
-    	   try {
-    	   Token t = null;
-    	   String msg ="";
-    	   while ( (t = lexico.nextToken()) != null ) {
-    	     System.out.println(t.getLexeme()); 
-    	     
-    	     // só escreve o lexema
-    		 // necessário escrever t.getId (), t.getPosition()
-    	     msg += t.getId()+"    "+ t.getLexeme()+"    "+t.getPosition()+"\n";
-    	     // t.getId () - retorna o identificador da classe. 
-    		 // olhar Constants.java e adaptar, pois deve ser apresentada 
-    		 // a classe por extenso
-    	     //
-    		 // t.getPosition () - retorna a posição inicial do lexema 
-    		 // no editor, necessário adaptar para mostrar a linha	
+				JTextArea textArea = (JTextArea) getComponentByName("CodeBlock");
+				String text = textArea.getText();
+				JTextField jTextField = (JTextField) getComponentByName("StatusBar");
+				jTextField.setText(path);
 
-    	     // esse código apresenta os tokens enquanto não ocorrer erro
-    	     // no entanto, os tokens devem ser apresentados SÓ se não 
-    		 // ocorrer erro, necessário adaptar para atender o que foi 
-    		 // solicitado		   
-    	   }
-    	   
-    	   messageBlock.setText(msg);
-    	   }
-    	   catch ( LexicalError e ) {  // tratamento de erros
-    	     System.out.println(e.getMessage() + " em " + e.getPosition());
-    	 
-    	     // e.getMessage() - retorna a mensagem de erro de SCANNER_ERRO 
-    		 // (olhar ScannerConstants.java e adaptar conforme o enunciado 
-    		 // da parte 2)
-    	     //
-    		 // e.getPosition() - retorna a posição inicial do erro, tem 
-    		 // que adaptar para mostrar a linha  
-    	    }
-    	
-    	
-    }
-    
-    public void metodoMostraEquipe() {
-    	JTextArea m = (JTextArea) getComponentByName("MessageBlock");
-    	m.setText("Equipe:Guilherme W. Back, João Victor Schmidt e Lucas Fritzke");
-    	
-    }
+				String[] splitString = text.split("\n");
 
-    public void metodoCopiar() {
-        JTextArea jTextArea1 = (JTextArea) getComponentByName("CodeBlock");
-        JTextArea jTextArea2 = (JTextArea) getComponentByName("MessageBlock");
-        
-        String selected1 = jTextArea1.getSelectedText();
-        String selected2 = jTextArea2.getSelectedText();
-             
-        if(selected1 != null && !selected1.equals("") ){
-            this.copiedText = selected1;
-            StringSelection stringSelection = new StringSelection(selected1);
-            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
-        }
-        else if(selected2 != null && !selected2.equals("")){
-            this.copiedText = selected2;
-            StringSelection stringSelection = new StringSelection(selected2);
-            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
-        }
-       
-       
-    }
+				try {
+					FileWriter fw = new FileWriter(file);
+					BufferedWriter out = new BufferedWriter(fw);
+					for (int i = 0; i < splitString.length; i++) {
+						out.write(splitString[i] + "\n");
+					}
+					out.flush();
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-    public void metodoColar(){ 
-        if(this.copiedText == null){
-            return;
-        }
+			}
 
-        JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
-        int caret = jTextArea.getCaretPosition();
+		}
 
-        char[] selectedText = copiedText.toCharArray();
-        char[] textArr = jTextArea.getText().toCharArray();
-        char[] newTextArr = new char[textArr.length + selectedText.length];
+	}
 
-        //populate the new array ,
-        for(int i = 0; i < textArr.length; i++){
-            newTextArr[i] = textArr[i];
-        }
+	public void metodoCompilar() {
+		JTextArea messageBlock = (JTextArea) getComponentByName("MessageBlock");
+		JTextArea codeBlock = (JTextArea) getComponentByName("CodeBlock");
+		Lexico lexico = new Lexico();
+		String codigoFonte = codeBlock.getText();
+		
+		ArrayList listaTokens = new ArrayList();
+		StringBuilder tabela = new StringBuilder();
+		tabela.append(String.format("%-4s %-10s %-6s%n", "ID", "Lexema", "Linha"));
+		lexico.setInput(codigoFonte);
+		try {
+			Token t = null;
 
-        for(int i = caret, z = 0; z<selectedText.length; i++, z++){
-            for(int x = newTextArr.length-1; x > i; x--){
-                newTextArr[x] = newTextArr[x-1]; 
-            }
-            newTextArr[i] =  selectedText[z];
-        }
+			while ((t = lexico.nextToken()) != null) {
 
-        String text = new String(newTextArr);
-        jTextArea.setText(text);
+				// só escreve o lexema
+				// necessário escrever t.getId (), t.getPosition()
+				// msg += t.getId() + " " + t.getLexeme() + " " + t.getPosition() + "\n";
+				String[] linha = new String[] { Integer.toString(t.getId()), t.getLexeme(),
+						Integer.toString(t.getPosition()) };
+				listaTokens.add(linha);
+				// t.getId () - retorna o identificador da classe.
+				// olhar Constants.java e adaptar, pois deve ser apresentada
+				// a classe por extenso
+				//
+				// t.getPosition () - retorna a posição inicial do lexema
+				// no editor, necessário adaptar para mostrar a linha
 
-    }
+				// esse código apresenta os tokens enquanto não ocorrer erro
+				// no entanto, os tokens devem ser apresentados SÓ se não
+				// ocorrer erro, necessário adaptar para atender o que foi
+				// solicitado
+			}
 
+			while (listaTokens.size() != 0) {
+				String[] linha = (String[]) listaTokens.get(0);
+				listaTokens.remove(0);
+				String id = linha[0];
+				String lexema = linha[1];
+				String linhaStr = linha[2];
+				String linhaFormatada = String.format("%-4s %-10s %-6s%n", id, lexema, linhaStr);
+				tabela.append(linhaFormatada);
+			}
 
-    public void metodoRecortar(){
-        JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
-        int caret = jTextArea.getCaretPosition();
-        char[] selectedText = jTextArea.getSelectedText() != null ?  jTextArea.getSelectedText().toCharArray() : null;
-        if(selectedText ==  null){
-            return;
-        }
-        char[] allText = jTextArea.getText().toCharArray();
-        
-        if(allText.length == selectedText.length){
-            String newText = new String(allText);
-            this.copiedText = newText;
-            StringSelection stringSelection = new StringSelection(this.copiedText);
-            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
-            jTextArea.setText("");
-        }
-        else{
-            char[] newChar = new char[allText.length - selectedText.length];
+			messageBlock.setText(tabela.toString());
+		} catch (LexicalError e) { // tratamento de erros
+			messageBlock.setText(e.toString());
+			System.out.println(codigoFonte);
+			// e.getMessage() - retorna a mensagem de erro de SCANNER_ERRO
+			// (olhar ScannerConstants.java e adaptar conforme o enunciado
+			// da parte 2)
+			//
+			// e.getPosition() - retorna a posição inicial do erro, tem
+			// que adaptar para mostrar a linha
+		}
 
-            for(int i = 0; i < allText.length - 1; i++){
-                if(caret>i){
-                    newChar[i] = allText[i];
-                }else{
-                    for(int z = newChar.length-1;  z>=caret; z--){
-                        newChar[z] = allText[selectedText.length + z];
-                    }
-                    break;
-                }
-            }
+	}
 
-            String newText = new String(newChar);
-            jTextArea.setText(newText);
-            newText = new String(selectedText);
-            this.copiedText = newText;
-            StringSelection stringSelection = new StringSelection(newText);
-            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
-        }
-    }
+	public void metodoMostraEquipe() {
+		JTextArea m = (JTextArea) getComponentByName("MessageBlock");
+		m.setText("Equipe:Guilherme W. Back, João Victor Schmidt e Lucas Fritzke");
 
-    public Component getComponentByName(String name){
-          for(int i = 0; i < components.size(); i++){
-            Component c = (Component) components.get(i); 
-            if(c.getName().equals(name)){
-                return c;
-            }
-        }
-        return null;
-    }
+	}
+
+	public void metodoCopiar() {
+		JTextArea jTextArea1 = (JTextArea) getComponentByName("CodeBlock");
+		JTextArea jTextArea2 = (JTextArea) getComponentByName("MessageBlock");
+
+		String selected1 = jTextArea1.getSelectedText();
+		String selected2 = jTextArea2.getSelectedText();
+
+		if (selected1 != null && !selected1.equals("")) {
+			this.copiedText = selected1;
+			StringSelection stringSelection = new StringSelection(selected1);
+			java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, null);
+		} else if (selected2 != null && !selected2.equals("")) {
+			this.copiedText = selected2;
+			StringSelection stringSelection = new StringSelection(selected2);
+			java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, null);
+		}
+
+	}
+
+	public void metodoColar() {
+		if (this.copiedText == null) {
+			return;
+		}
+
+		JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
+		int caret = jTextArea.getCaretPosition();
+
+		char[] selectedText = copiedText.toCharArray();
+		char[] textArr = jTextArea.getText().toCharArray();
+		char[] newTextArr = new char[textArr.length + selectedText.length];
+
+		// populate the new array ,
+		for (int i = 0; i < textArr.length; i++) {
+			newTextArr[i] = textArr[i];
+		}
+
+		for (int i = caret, z = 0; z < selectedText.length; i++, z++) {
+			for (int x = newTextArr.length - 1; x > i; x--) {
+				newTextArr[x] = newTextArr[x - 1];
+			}
+			newTextArr[i] = selectedText[z];
+		}
+
+		String text = new String(newTextArr);
+		jTextArea.setText(text);
+
+	}
+
+	public void metodoRecortar() {
+		JTextArea jTextArea = (JTextArea) getComponentByName("CodeBlock");
+		int caret = jTextArea.getCaretPosition();
+		char[] selectedText = jTextArea.getSelectedText() != null ? jTextArea.getSelectedText().toCharArray() : null;
+		if (selectedText == null) {
+			return;
+		}
+		char[] allText = jTextArea.getText().toCharArray();
+
+		if (allText.length == selectedText.length) {
+			String newText = new String(allText);
+			this.copiedText = newText;
+			StringSelection stringSelection = new StringSelection(this.copiedText);
+			java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, null);
+			jTextArea.setText("");
+		} else {
+			char[] newChar = new char[allText.length - selectedText.length];
+
+			for (int i = 0; i < allText.length - 1; i++) {
+				if (caret > i) {
+					newChar[i] = allText[i];
+				} else {
+					for (int z = newChar.length - 1; z >= caret; z--) {
+						newChar[z] = allText[selectedText.length + z];
+					}
+					break;
+				}
+			}
+
+			String newText = new String(newChar);
+			jTextArea.setText(newText);
+			newText = new String(selectedText);
+			this.copiedText = newText;
+			StringSelection stringSelection = new StringSelection(newText);
+			java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, null);
+		}
+	}
+
+	public Component getComponentByName(String name) {
+		for (int i = 0; i < components.size(); i++) {
+			Component c = (Component) components.get(i);
+			if (c.getName().equals(name)) {
+				return c;
+			}
+		}
+		return null;
+	}
 
 }
