@@ -152,10 +152,10 @@ public class CompiladorUtil {
 		JTextArea codeBlock = (JTextArea) getComponentByName("CodeBlock");
 		Lexico lexico = new Lexico();
 		String codigoFonte = codeBlock.getText();
-		
+
 		ArrayList listaTokens = new ArrayList();
 		StringBuilder tabela = new StringBuilder();
-		tabela.append(String.format("%-4s %-10s %-6s%n", "ID", "Lexema", "Linha"));
+		tabela.append(String.format("%-4s %-18s %-6s%n", "Linha", "Classe", "Lexema"));
 		lexico.setInput(codigoFonte);
 		try {
 			Token t = null;
@@ -164,9 +164,11 @@ public class CompiladorUtil {
 
 				// só escreve o lexema
 				// necessário escrever t.getId (), t.getPosition()
-				// msg += t.getId() + " " + t.getLexeme() + " " + t.getPosition() + "\n";
-				String[] linha = new String[] { Integer.toString(t.getId()), t.getLexeme(),
-						Integer.toString(t.getPosition()) };
+				String classe = this.verificarClasse(t.getId());
+				
+				String[] linha = new String[] { Integer.toString(t.getPosition()), this.verificarClasse(t.getId()),
+						t.getLexeme()
+				};
 				listaTokens.add(linha);
 				// t.getId () - retorna o identificador da classe.
 				// olhar Constants.java e adaptar, pois deve ser apresentada
@@ -184,10 +186,10 @@ public class CompiladorUtil {
 			while (listaTokens.size() != 0) {
 				String[] linha = (String[]) listaTokens.get(0);
 				listaTokens.remove(0);
-				String id = linha[0];
-				String lexema = linha[1];
-				String linhaStr = linha[2];
-				String linhaFormatada = String.format("%-4s %-10s %-6s%n", id, lexema, linhaStr);
+				String linhaStr = linha[0];
+				String classe = linha[1];
+				String lexema = linha[2];
+				String linhaFormatada = String.format("%-4s %-18s %-6s%n", linhaStr, classe, lexema);
 				tabela.append(linhaFormatada);
 			}
 
@@ -203,6 +205,23 @@ public class CompiladorUtil {
 			// que adaptar para mostrar a linha
 		}
 
+	}
+
+	private String verificarClasse(int id) {
+		if(id == 2) {
+			return "Identificador";
+		} else if (id == 3 ) {
+			return "Constante_int";
+		} else if (id == 4 ) {
+			return "Constante_float";
+		} else if (id == 5 ) {
+			return "Constante_string";
+		} else if (id >= 6 && id <= 17 ) {
+			return "Palavra Reservada";
+		} else {
+			return "Símbolo Especial";
+		} 
+		
 	}
 
 	public void metodoMostraEquipe() {
