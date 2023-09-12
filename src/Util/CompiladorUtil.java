@@ -152,35 +152,29 @@ public class CompiladorUtil {
 		JTextArea codeBlock = (JTextArea) getComponentByName("CodeBlock");
 		Lexico lexico = new Lexico();
 		String codigoFonte = codeBlock.getText();
-
-		ArrayList listaTokens = new ArrayList();
+		//ArrayList tabelaPosicaoLinha = this.gerarTabelaPosicaoLinha(codigoFonte);
+		ArrayList<String[]> listaTokens = new ArrayList<String[]>();
 		StringBuilder tabela = new StringBuilder();
-		tabela.append(String.format("%-4s %-18s %-6s%n", "Linha", "Classe", "Lexema"));
+		tabela.append(String.format("%-5s %-18s %-6s%n", "Linha", "Classe", "Lexema"));
 		lexico.setInput(codigoFonte);
+		int contLinha =1;
+		int contPos =0;
 		try {
 			Token t = null;
-
 			while ((t = lexico.nextToken()) != null) {
-
-				// só escreve o lexema
-				// necessário escrever t.getId (), t.getPosition()
-				String classe = this.verificarClasse(t.getId());
 				
-				String[] linha = new String[] { Integer.toString(t.getPosition()), this.verificarClasse(t.getId()),
+				// Contador de linhas
+				while(contPos <= t.getPosition()) {
+					if(codigoFonte.charAt(contPos) == '\n') {
+						contLinha++;
+					}
+					contPos++;
+				}
+				
+				String[] linha = new String[] { Integer.toString(contLinha), this.verificarClasse(t.getId()),
 						t.getLexeme()
 				};
 				listaTokens.add(linha);
-				// t.getId () - retorna o identificador da classe.
-				// olhar Constants.java e adaptar, pois deve ser apresentada
-				// a classe por extenso
-				//
-				// t.getPosition () - retorna a posição inicial do lexema
-				// no editor, necessário adaptar para mostrar a linha
-
-				// esse código apresenta os tokens enquanto não ocorrer erro
-				// no entanto, os tokens devem ser apresentados SÓ se não
-				// ocorrer erro, necessário adaptar para atender o que foi
-				// solicitado
 			}
 
 			while (listaTokens.size() != 0) {
@@ -189,35 +183,53 @@ public class CompiladorUtil {
 				String linhaStr = linha[0];
 				String classe = linha[1];
 				String lexema = linha[2];
-				String linhaFormatada = String.format("%-4s %-18s %-6s%n", linhaStr, classe, lexema);
+				String linhaFormatada = String.format("%-5s %-18s %-6s%n", linhaStr, classe, lexema);
 				tabela.append(linhaFormatada);
 			}
+			tabela.append("programa compilado com sucesso");
 
 			messageBlock.setText(tabela.toString());
 		} catch (LexicalError e) { // tratamento de erros
-			messageBlock.setText(e.toString());
-			System.out.println(codigoFonte);
-			// e.getMessage() - retorna a mensagem de erro de SCANNER_ERRO
-			// (olhar ScannerConstants.java e adaptar conforme o enunciado
-			// da parte 2)
-			//
-			// e.getPosition() - retorna a posição inicial do erro, tem
-			// que adaptar para mostrar a linha
+			String str="";
+			contPos = e.getPosition();
+			
+			while(contPos>=0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n' ){
+				contPos--;
+			}
+			contPos++;
+			while(contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
+				str += codigoFonte.charAt(contPos);
+				contPos++;
+			}
+			messageBlock.setText("Linha "+contLinha+": "+str+ " "+ e.getMessage());
 		}
 
 	}
 
+	private ArrayList gerarTabelaPosicaoLinha(String codigoFonte) {
+		ArrayList t = new ArrayList();
+		int tepPos =0;
+		int contLinha = 1;
+		for(int i=0; i < codigoFonte.length(); i++) {
+			if(codigoFonte.charAt(i) =='\n') {
+				int[] inicioFimLinha = new int[] {tepPos, i, contLinha};
+			}
+			
+		}
+		return null;
+	}
+
 	private String verificarClasse(int id) {
 		if(id == 2) {
-			return "Identificador";
+			return "identificador";
 		} else if (id == 3 ) {
-			return "Constante_int";
+			return "constante_int";
 		} else if (id == 4 ) {
-			return "Constante_float";
+			return "constante_float";
 		} else if (id == 5 ) {
-			return "Constante_string";
+			return "constante_string";
 		} else if (id >= 6 && id <= 17 ) {
-			return "Palavra Reservada";
+			return "palavra reservada";
 		} else {
 			return "Símbolo Especial";
 		} 
