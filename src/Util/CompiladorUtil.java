@@ -148,96 +148,99 @@ public class CompiladorUtil {
 	}
 
 	public void metodoCompilar() {
-		
+
 		JTextArea messageBlock = (JTextArea) getComponentByName("MessageBlock");
 		JTextArea codeBlock = (JTextArea) getComponentByName("CodeBlock");
 		Lexico lexico = new Lexico();
 		String codigoFonte = codeBlock.getText();
-		int contLinha =1;
-		int contPos =0;
+		int contLinha = 1;
+		int contPos = 0;
 		ArrayList<String[]> listaTokens = new ArrayList<String[]>();
 		StringBuilder tabela = new StringBuilder();
-		
+
 		// Cabecalho
 		tabela.append(String.format("%-5s %-18s %-6s%n", "Linha", "Classe", "Lexema"));
 		lexico.setInput(codigoFonte);
-		
+
 		try {
 			Token t = null;
 			while ((t = lexico.nextToken()) != null) {
-				
+
 				// Contador de quebras de linha
-				while(contPos <= t.getPosition()) {
-					if(codigoFonte.charAt(contPos) == '\n') {
+				while (contPos <= t.getPosition()) {
+					if (codigoFonte.charAt(contPos) == '\n') {
 						contLinha++;
 					}
 					contPos++;
 				}
+
 				// Adiciona em um array as informacoes do token
-				String[] linha = new String[] { Integer.toString(contLinha), this.verificarClasse(t.getId()),
-						t.getLexeme()
-				};
+				String[] linha = new String[] { Integer.toString(contLinha), this.verificarClasse(t),
+						t.getLexeme() };
 				listaTokens.add(linha);
 			}
-			
+
 			// apos reconhecer todos os tokens, é montada a mensagem para o usuario
 			while (listaTokens.size() != 0) {
 				String[] linha = (String[]) listaTokens.get(0);
 				listaTokens.remove(0);
-				
-				
+
 				String linhaFormatada = String.format("%-5s %-18s %-6s%n", linha[0], linha[1], linha[2]);
 				tabela.append(linhaFormatada);
 			}
 			tabela.append("\nPrograma compilado com sucesso");
 
 			messageBlock.setText(tabela.toString());
-			
+
 		} catch (LexicalError e) { // tratamento de erros
-			String str="";
+			String str = "";
 			contPos = e.getPosition();
-			
-			while(contPos>=0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n' ){
+
+			while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
 				contPos--;
 			}
 			contPos++;
-			while(contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
+			while (contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' '
+					&& codigoFonte.charAt(contPos) != '\n') {
 				str += codigoFonte.charAt(contPos);
 				contPos++;
 			}
-			messageBlock.setText("Linha "+contLinha+": "+str+ " "+ e.getMessage());
+			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
 		}
 
 	}
 
 	private ArrayList gerarTabelaPosicaoLinha(String codigoFonte) {
 		ArrayList t = new ArrayList();
-		int tepPos =0;
+		int tepPos = 0;
 		int contLinha = 1;
-		for(int i=0; i < codigoFonte.length(); i++) {
-			if(codigoFonte.charAt(i) =='\n') {
-				int[] inicioFimLinha = new int[] {tepPos, i, contLinha};
+		for (int i = 0; i < codigoFonte.length(); i++) {
+			if (codigoFonte.charAt(i) == '\n') {
+				int[] inicioFimLinha = new int[] { tepPos, i, contLinha };
 			}
-			
+
 		}
 		return null;
 	}
 
-	private String verificarClasse(int id) {
-		if(id == 2) {
+	private String verificarClasse(Token t) throws LexicalError {
+		int id = t.getId();
+		if (id == 2) {
 			return "identificador";
-		} else if (id == 3 ) {
+		} else if (id == 3) {
 			return "constante_int";
-		} else if (id == 4 ) {
+		} else if (id == 4) {
 			return "constante_float";
-		} else if (id == 5 ) {
+		} else if (id == 5) {
 			return "constante_string";
-		} else if (id >= 6 && id <= 17 ) {
+		} else if (id > 6 && id <= 17) {
 			return "palavra reservada";
-		} else {
+		} else if (id > 17) {
 			return "Símbolo Especial";
-		} 
-		
+		} else {
+			throw new LexicalError( "simbolo invalido", t.getPosition());
+		}
+
 	}
 
 	public void metodoMostraEquipe() {
