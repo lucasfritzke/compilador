@@ -148,47 +148,51 @@ public class CompiladorUtil {
 	}
 
 	public void metodoCompilar() {
+		
 		JTextArea messageBlock = (JTextArea) getComponentByName("MessageBlock");
 		JTextArea codeBlock = (JTextArea) getComponentByName("CodeBlock");
 		Lexico lexico = new Lexico();
 		String codigoFonte = codeBlock.getText();
-		//ArrayList tabelaPosicaoLinha = this.gerarTabelaPosicaoLinha(codigoFonte);
-		ArrayList<String[]> listaTokens = new ArrayList<String[]>();
-		StringBuilder tabela = new StringBuilder();
-		tabela.append(String.format("%-5s %-18s %-6s%n", "Linha", "Classe", "Lexema"));
-		lexico.setInput(codigoFonte);
 		int contLinha =1;
 		int contPos =0;
+		ArrayList<String[]> listaTokens = new ArrayList<String[]>();
+		StringBuilder tabela = new StringBuilder();
+		
+		// Cabecalho
+		tabela.append(String.format("%-5s %-18s %-6s%n", "Linha", "Classe", "Lexema"));
+		lexico.setInput(codigoFonte);
+		
 		try {
 			Token t = null;
 			while ((t = lexico.nextToken()) != null) {
 				
-				// Contador de linhas
+				// Contador de quebras de linha
 				while(contPos <= t.getPosition()) {
 					if(codigoFonte.charAt(contPos) == '\n') {
 						contLinha++;
 					}
 					contPos++;
 				}
-				
+				// Adiciona em um array as informacoes do token
 				String[] linha = new String[] { Integer.toString(contLinha), this.verificarClasse(t.getId()),
 						t.getLexeme()
 				};
 				listaTokens.add(linha);
 			}
-
+			
+			// apos reconhecer todos os tokens, é montada a mensagem para o usuario
 			while (listaTokens.size() != 0) {
 				String[] linha = (String[]) listaTokens.get(0);
 				listaTokens.remove(0);
-				String linhaStr = linha[0];
-				String classe = linha[1];
-				String lexema = linha[2];
-				String linhaFormatada = String.format("%-5s %-18s %-6s%n", linhaStr, classe, lexema);
+				
+				
+				String linhaFormatada = String.format("%-5s %-18s %-6s%n", linha[0], linha[1], linha[2]);
 				tabela.append(linhaFormatada);
 			}
-			tabela.append("programa compilado com sucesso");
+			tabela.append("\nPrograma compilado com sucesso");
 
 			messageBlock.setText(tabela.toString());
+			
 		} catch (LexicalError e) { // tratamento de erros
 			String str="";
 			contPos = e.getPosition();
