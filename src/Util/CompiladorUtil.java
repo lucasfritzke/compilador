@@ -238,7 +238,7 @@ public class CompiladorUtil {
 		} else if (id > 17) {
 			return "Símbolo Especial";
 		} else {
-			throw new LexicalError( "simbolo invalido", t.getPosition());
+			throw new LexicalError( "palavra reservada invalida", t.getPosition());
 		}
 
 	}

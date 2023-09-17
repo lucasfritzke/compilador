@@ -1088,10 +1088,10 @@ public interface ScannerConstants
     {
         "Símbolo inválido",
         "",
-        "",
+        "identificador invalido",
         "Erro identificando string",
         "", //5
-        "",
+        "palavra reservada invalida",
         "",
         "",
         "",
