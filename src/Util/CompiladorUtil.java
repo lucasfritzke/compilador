@@ -175,8 +175,7 @@ public class CompiladorUtil {
 				}
 
 				// Adiciona em um array as informacoes do token
-				String[] linha = new String[] { Integer.toString(contLinha), this.verificarClasse(t),
-						t.getLexeme() };
+				String[] linha = new String[] { Integer.toString(contLinha), this.verificarClasse(t), t.getLexeme() };
 				listaTokens.add(linha);
 			}
 
@@ -193,19 +192,39 @@ public class CompiladorUtil {
 			messageBlock.setText(tabela.toString());
 
 		} catch (LexicalError e) { // tratamento de erros
+
 			String str = "";
 			contPos = e.getPosition();
 
-			while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
-				contPos--;
-			}
-			contPos++;
-			while (contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' '
-					&& codigoFonte.charAt(contPos) != '\n') {
+			if (e.getMessage().equals("Símbolo inválido")) {
 				str += codigoFonte.charAt(contPos);
+
+				
+			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado")) {
+				
+				// Contador de quebras de linha
+				while (contPos <= e.getPosition()) {
+					if (codigoFonte.charAt(contPos) == '\n') {
+						contLinha++;
+					}
+					contPos++;
+				}
+				
+				messageBlock.setText("Linha " + contLinha + " " + e.getMessage());
+				return;
+			} else {
+				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
+					contPos--;
+				}
 				contPos++;
+				while (contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' '
+						&& codigoFonte.charAt(contPos) != '\n') {
+					str += codigoFonte.charAt(contPos);
+					contPos++;
+				}
+
 			}
-			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
+			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage() + contPos);
 		}
 
 	}
@@ -238,7 +257,7 @@ public class CompiladorUtil {
 		} else if (id > 17) {
 			return "Símbolo Especial";
 		} else {
-			throw new LexicalError( "palavra reservada invalida", t.getPosition());
+			throw new LexicalError("palavra reservada invalida", t.getPosition());
 		}
 
 	}

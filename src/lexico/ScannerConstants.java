@@ -1106,7 +1106,7 @@ public interface ScannerConstants
         "",
         "",
         "",//20
-        "Erro identificando <ignorar>",
+        "comentário de bloco inválido ou não finalizado",
         "Erro identificando identificador",
         "",
         "",
