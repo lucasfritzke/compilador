@@ -192,27 +192,29 @@ public class CompiladorUtil {
 			messageBlock.setText(tabela.toString());
 
 		} catch (LexicalError e) { // tratamento de erros
+			
+			// Contador de quebras de linha
+			while (contPos <= e.getPosition()) {
+				if (codigoFonte.charAt(contPos) == '\n') {
+					contLinha++;
+				}
+				contPos++;
+			}
 
 			String str = "";
 			contPos = e.getPosition();
 
 			if (e.getMessage().equals("Símbolo inválido")) {
 				str += codigoFonte.charAt(contPos);
-
 				
-			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado")) {
+			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado") || 
+					e.getMessage().equals("constante_string inválida")) {
 				
-				// Contador de quebras de linha
-				while (contPos <= e.getPosition()) {
-					if (codigoFonte.charAt(contPos) == '\n') {
-						contLinha++;
-					}
-					contPos++;
-				}
-				
-				messageBlock.setText("Linha " + contLinha + " " + e.getMessage());
+				messageBlock.setText("Linha " + contLinha + ": " + e.getMessage());
 				return;
 			} else {
+				
+			// Caso seja uma palavra reservada ou identificador	
 				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
 					contPos--;
 				}
@@ -224,23 +226,11 @@ public class CompiladorUtil {
 				}
 
 			}
-			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage() + contPos);
+			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
 		}
 
 	}
 
-	private ArrayList gerarTabelaPosicaoLinha(String codigoFonte) {
-		ArrayList t = new ArrayList();
-		int tepPos = 0;
-		int contLinha = 1;
-		for (int i = 0; i < codigoFonte.length(); i++) {
-			if (codigoFonte.charAt(i) == '\n') {
-				int[] inicioFimLinha = new int[] { tepPos, i, contLinha };
-			}
-
-		}
-		return null;
-	}
 
 	private String verificarClasse(Token t) throws LexicalError {
 		int id = t.getId();

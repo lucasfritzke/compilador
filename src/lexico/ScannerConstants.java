@@ -1089,7 +1089,7 @@ public interface ScannerConstants
         "Símbolo inválido",
         "",
         "identificador invalido",
-        "Erro identificando string",
+        "constante_string inválida",
         "", //5
         "palavra reservada invalida",
         "",
