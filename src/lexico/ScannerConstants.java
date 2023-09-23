@@ -1107,7 +1107,7 @@ public interface ScannerConstants
         "",
         "",//20
         "comentário de bloco inválido ou não finalizado",
-        "Erro identificando identificador",
+        "identificador inválido",
         "",
         "",
         "",//25
@@ -1118,7 +1118,7 @@ public interface ScannerConstants
         "Erro identificando float",//30
         "",
         "",
-        "Erro identificando identificador",
+        "identificador inválido",
         "",
         "",//35
         "",
