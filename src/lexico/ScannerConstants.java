@@ -1086,10 +1086,10 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Símbolo inválido",
+        "Simbolo invalido",
         "",
         "identificador invalido",
-        "constante_string inválida",
+        "constante_string invalida",
         "", //5
         "palavra reservada invalida",
         "",
@@ -1106,19 +1106,19 @@ public interface ScannerConstants
         "",
         "",
         "",//20
-        "comentário de bloco inválido ou não finalizado",
-        "identificador inválido",
+        "comentário de bloco invalido ou não finalizado",
+        "identificador invalido",
         "",
         "",
         "",//25
         "",
         "",
         "",
-        "Erro identificando string",
+        "constante_string invalida",
         "Erro identificando float",//30
         "",
         "",
-        "identificador inválido",
+        "identificador invalido",
         "",
         "",//35
         "",
