@@ -209,7 +209,6 @@ public class CompiladorUtil {
 				
 			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado") || 
 					e.getMessage().equals("constante_string inválida")) {
-				
 				messageBlock.setText("Linha " + contLinha + ": " + e.getMessage());
 				return;
 			} else {
