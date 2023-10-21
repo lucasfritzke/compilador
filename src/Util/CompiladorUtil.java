@@ -17,9 +17,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import lexico.LexicalError;
-import lexico.Lexico;
-import lexico.Token;
+
+import classesGals.LexicalError;
+import classesGals.Lexico;
+import classesGals.Token;
 
 public class CompiladorUtil {
 

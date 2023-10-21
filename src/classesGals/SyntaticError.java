@@ -1,4 +1,4 @@
-package lexico;
+package classesGals;
 
 public class SyntaticError extends AnalysisError
 {
