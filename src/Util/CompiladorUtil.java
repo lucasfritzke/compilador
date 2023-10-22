@@ -18,9 +18,15 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import classesGals.LexicalError;
-import classesGals.Lexico;
-import classesGals.Token;
+import gals.LexicalError;
+import gals.Lexico;
+import gals.SemanticError;
+import gals.Semantico;
+import gals.Sintatico;
+import gals.SyntaticError;
+import gals.Token;
+
+
 
 public class CompiladorUtil {
 
@@ -152,10 +158,12 @@ public class CompiladorUtil {
 
 		JTextArea messageBlock = (JTextArea) getComponentByName("MessageBlock");
 		JTextArea codeBlock = (JTextArea) getComponentByName("CodeBlock");
-		Lexico lexico = new Lexico();
-		String codigoFonte = codeBlock.getText();
 		int contLinha = 1;
 		int contPos = 0;
+		String codigoFonte = codeBlock.getText();
+		/* 
+		Lexico lexico = new Lexico();
+		String codigoFonte = codeBlock.getText();
 		ArrayList<String[]> listaTokens = new ArrayList<String[]>();
 		StringBuilder tabela = new StringBuilder();
 
@@ -228,6 +236,73 @@ public class CompiladorUtil {
 			}
 			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
 		}
+		*/
+
+		Lexico lexico = new Lexico();
+		Sintatico sintatico = new Sintatico();
+		Semantico semantico = new Semantico();
+		//...
+		lexico.setInput(codigoFonte);
+		//...
+		try
+		{
+			sintatico.parse(lexico, semantico);    // tradução dirigida pela sintaxe
+			messageBlock.setText("programa compilado com sucesso");
+		}
+		// mensagem: programa compilado com sucesso - área reservada para mensagens
+		
+		catch ( LexicalError e )
+		{
+			//Trata erros léxicos, conforme especificação da parte 2 - do compilador
+			// Contador de quebras de linha
+			while (contPos <= e.getPosition()) {
+				if (codigoFonte.charAt(contPos) == '\n') {
+					contLinha++;
+				}
+				contPos++;
+			}
+
+			String str = "";
+			contPos = e.getPosition();
+
+			if (e.getMessage().equals("Símbolo inválido")) {
+				str += codigoFonte.charAt(contPos);
+				
+			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado") || 
+					e.getMessage().equals("constante_string inválida")) {
+				messageBlock.setText("Linha " + contLinha + ": " + e.getMessage());
+				return;
+			} else {
+				
+			// Caso seja uma palavra reservada ou identificador	
+				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
+					contPos--;
+				}
+				contPos++;
+				while (contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' '
+						&& codigoFonte.charAt(contPos) != '\n') {
+					str += codigoFonte.charAt(contPos);
+					contPos++;
+				}
+
+			}
+			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
+
+		}
+		catch ( SyntaticError e )
+		{
+		     System.out.println(e.getPosition() + " símbolo encontrado: na entrada " + e.getMessage()); 
+			 
+			//Trata erros sintáticos
+			//linha 				sugestão: converter getPosition em linha
+			//símbolo encontrado    sugestão: implementar um método getToken no sintatico
+			//mensagem - símbolos esperados,   alterar ParserConstants.java, String[] PARSER_ERROR		
+		}
+		catch ( SemanticError e )
+		{
+			//Trata erros semânticos
+		}
+
 
 	}
 
