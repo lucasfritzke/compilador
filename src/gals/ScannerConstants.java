@@ -1114,11 +1114,11 @@ public interface ScannerConstants
         "",
         "",
         "",
-        "Erro identificando string",
+        "constante_string invalida",
         "Erro identificando float",//30
         "",
         "",
-        "identificador inválido",
+        "identificador invalido",
         "",
         "",//35
         "",

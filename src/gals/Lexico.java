@@ -1,5 +1,6 @@
 package gals;
 
+
 public class Lexico implements Constants
 {
     private int position;
@@ -134,3 +135,4 @@ public class Lexico implements Constants
             return (char) -1;
     }
 }
+
