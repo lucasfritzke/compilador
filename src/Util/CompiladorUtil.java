@@ -291,7 +291,20 @@ public class CompiladorUtil {
 		}
 		catch ( SyntaticError e )
 		{
-		     System.out.println(e.getPosition() + " símbolo encontrado: na entrada " + e.getMessage()); 
+
+
+			//Trata erros léxicos, conforme especificação da parte 2 - do compilador
+			// Contador de quebras de linha
+			while (contPos <= e.getPosition()) {
+				if (codigoFonte.charAt(contPos) == '\n') {
+					contLinha++;
+				}
+				contPos++;
+			}
+
+			messageBlock.setText("Erro na linha " + contLinha + " - encontrado "+ sintatico.getToken() + e.getMessage());
+
+		     // System.out.println(contLinha + " símbolo encontrado: na entrada " + e.getMessage()); 
 			 
 			//Trata erros sintáticos
 			//linha 				sugestão: converter getPosition em linha
@@ -305,6 +318,8 @@ public class CompiladorUtil {
 
 
 	}
+
+	
 
 
 	private String verificarClasse(Token t) throws LexicalError {
