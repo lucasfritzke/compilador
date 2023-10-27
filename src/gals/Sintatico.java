@@ -107,9 +107,9 @@ public class Sintatico implements Constants
             ;
     }
 
-    public String getToken(){
+    public Token getToken(){
 
-        return currentToken.getLexeme();
+        return currentToken;
 
     }
 }

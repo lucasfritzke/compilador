@@ -1,10 +1,7 @@
 package Util;
 
-import java.util.Formatter;
-import java.util.Locale;
 import java.awt.Component;
 import java.awt.FileDialog;
-import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.io.BufferedWriter;
@@ -25,6 +22,7 @@ import gals.Semantico;
 import gals.Sintatico;
 import gals.SyntaticError;
 import gals.Token;
+
 
 
 
@@ -161,82 +159,6 @@ public class CompiladorUtil {
 		int contLinha = 1;
 		int contPos = 0;
 		String codigoFonte = codeBlock.getText();
-		/* 
-		Lexico lexico = new Lexico();
-		String codigoFonte = codeBlock.getText();
-		ArrayList<String[]> listaTokens = new ArrayList<String[]>();
-		StringBuilder tabela = new StringBuilder();
-
-		// Cabecalho
-		tabela.append(String.format("%-5s %-18s %-6s%n", "Linha", "Classe", "Lexema"));
-		lexico.setInput(codigoFonte);
-
-		try {
-			Token t = null;
-			while ((t = lexico.nextToken()) != null) {
-
-				// Contador de quebras de linha
-				while (contPos <= t.getPosition()) {
-					if (codigoFonte.charAt(contPos) == '\n') {
-						contLinha++;
-					}
-					contPos++;
-				}
-
-				// Adiciona em um array as informacoes do token
-				String[] linha = new String[] { Integer.toString(contLinha), this.verificarClasse(t), t.getLexeme() };
-				listaTokens.add(linha);
-			}
-
-			// apos reconhecer todos os tokens, é montada a mensagem para o usuario
-			while (listaTokens.size() != 0) {
-				String[] linha = (String[]) listaTokens.get(0);
-				listaTokens.remove(0);
-
-				String linhaFormatada = String.format("%-5s %-18s %-6s%n", linha[0], linha[1], linha[2]);
-				tabela.append(linhaFormatada);
-			}
-			tabela.append("\nPrograma compilado com sucesso");
-
-			messageBlock.setText(tabela.toString());
-
-		} catch (LexicalError e) { // tratamento de erros
-			
-			// Contador de quebras de linha
-			while (contPos <= e.getPosition()) {
-				if (codigoFonte.charAt(contPos) == '\n') {
-					contLinha++;
-				}
-				contPos++;
-			}
-
-			String str = "";
-			contPos = e.getPosition();
-
-			if (e.getMessage().equals("Símbolo inválido")) {
-				str += codigoFonte.charAt(contPos);
-				
-			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado") || 
-					e.getMessage().equals("constante_string inválida")) {
-				messageBlock.setText("Linha " + contLinha + ": " + e.getMessage());
-				return;
-			} else {
-				
-			// Caso seja uma palavra reservada ou identificador	
-				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
-					contPos--;
-				}
-				contPos++;
-				while (contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' '
-						&& codigoFonte.charAt(contPos) != '\n') {
-					str += codigoFonte.charAt(contPos);
-					contPos++;
-				}
-
-			}
-			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
-		}
-		*/
 
 		Lexico lexico = new Lexico();
 		Sintatico sintatico = new Sintatico();
@@ -292,9 +214,6 @@ public class CompiladorUtil {
 		catch ( SyntaticError e )
 		{
 
-
-			//Trata erros léxicos, conforme especificação da parte 2 - do compilador
-			// Contador de quebras de linha
 			while (contPos <= e.getPosition()) {
 				if (codigoFonte.charAt(contPos) == '\n') {
 					contLinha++;
@@ -302,14 +221,8 @@ public class CompiladorUtil {
 				contPos++;
 			}
 
-			messageBlock.setText("Erro na linha " + contLinha + " - encontrado "+ sintatico.getToken() + e.getMessage());
-
-		     // System.out.println(contLinha + " símbolo encontrado: na entrada " + e.getMessage()); 
-			 
-			//Trata erros sintáticos
-			//linha 				sugestão: converter getPosition em linha
-			//símbolo encontrado    sugestão: implementar um método getToken no sintatico
-			//mensagem - símbolos esperados,   alterar ParserConstants.java, String[] PARSER_ERROR		
+			String token = (sintatico.getToken().equals("$")) ? "EOF" : this.verificarClasse(sintatico.getToken()) ; 
+			messageBlock.setText("Erro na linha " + contLinha + " - encontrado "+ token +" "+ e.getMessage());
 		}
 		catch ( SemanticError e )
 		{
@@ -319,28 +232,20 @@ public class CompiladorUtil {
 
 	}
 
-	
-
-
-	private String verificarClasse(Token t) throws LexicalError {
+	private String verificarClasse(Token t) {
 		int id = t.getId();
-		if (id == 2) {
-			return "identificador";
-		} else if (id == 3) {
+		 if (id == 3) {
 			return "constante_int";
 		} else if (id == 4) {
 			return "constante_float";
 		} else if (id == 5) {
 			return "constante_string";
-		} else if (id > 6 && id <= 17) {
-			return "palavra reservada";
-		} else if (id > 17) {
-			return "Símbolo Especial";
 		} else {
-			throw new LexicalError("palavra reservada invalida", t.getPosition());
+			return t.getLexeme();
 		}
 
 	}
+
 
 	public void metodoMostraEquipe() {
 		JTextArea m = (JTextArea) getComponentByName("MessageBlock");
