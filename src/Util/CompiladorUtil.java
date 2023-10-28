@@ -23,9 +23,6 @@ import gals.Sintatico;
 import gals.SyntaticError;
 import gals.Token;
 
-
-
-
 public class CompiladorUtil {
 
 	private ArrayList components = new ArrayList();
@@ -163,19 +160,17 @@ public class CompiladorUtil {
 		Lexico lexico = new Lexico();
 		Sintatico sintatico = new Sintatico();
 		Semantico semantico = new Semantico();
-		//...
+		// ...
 		lexico.setInput(codigoFonte);
-		//...
-		try
-		{
-			sintatico.parse(lexico, semantico);    // tradução dirigida pela sintaxe
+		// ...
+		try {
+			sintatico.parse(lexico, semantico); // tradução dirigida pela sintaxe
 			messageBlock.setText("programa compilado com sucesso");
 		}
 		// mensagem: programa compilado com sucesso - área reservada para mensagens
-		
-		catch ( LexicalError e )
-		{
-			//Trata erros léxicos, conforme especificação da parte 2 - do compilador
+
+		catch (LexicalError e) {
+			// Trata erros léxicos, conforme especificação da parte 2 - do compilador
 			// Contador de quebras de linha
 			while (contPos <= e.getPosition()) {
 				if (codigoFonte.charAt(contPos) == '\n') {
@@ -189,14 +184,14 @@ public class CompiladorUtil {
 
 			if (e.getMessage().equals("Símbolo inválido")) {
 				str += codigoFonte.charAt(contPos);
-				
-			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado") || 
+
+			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado") ||
 					e.getMessage().equals("constante_string inválida")) {
 				messageBlock.setText("Linha " + contLinha + ": " + e.getMessage());
 				return;
 			} else {
-				
-			// Caso seja uma palavra reservada ou identificador	
+
+				// Caso seja uma palavra reservada ou identificador
 				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
 					contPos--;
 				}
@@ -210,9 +205,7 @@ public class CompiladorUtil {
 			}
 			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
 
-		}
-		catch ( SyntaticError e )
-		{
+		} catch (SyntaticError e) {
 
 			while (contPos <= e.getPosition()) {
 				if (codigoFonte.charAt(contPos) == '\n') {
@@ -221,20 +214,17 @@ public class CompiladorUtil {
 				contPos++;
 			}
 
-			String token = (sintatico.getToken().equals("$")) ? "EOF" : this.verificarClasse(sintatico.getToken()) ; 
-			messageBlock.setText("Erro na linha " + contLinha + " - encontrado "+ token +" "+ e.getMessage());
+			String token = (sintatico.getToken().equals("$")) ? "EOF" : this.verificarClasse(sintatico.getToken());
+			messageBlock.setText("Erro na linha " + contLinha + " - encontrado " + token + " " + e.getMessage());
+		} catch (SemanticError e) {
+			// Trata erros semânticos
 		}
-		catch ( SemanticError e )
-		{
-			//Trata erros semânticos
-		}
-
 
 	}
 
 	private String verificarClasse(Token t) {
 		int id = t.getId();
-		 if (id == 3) {
+		if (id == 3) {
 			return "constante_int";
 		} else if (id == 4) {
 			return "constante_float";
@@ -245,7 +235,6 @@ public class CompiladorUtil {
 		}
 
 	}
-
 
 	public void metodoMostraEquipe() {
 		JTextArea m = (JTextArea) getComponentByName("MessageBlock");
