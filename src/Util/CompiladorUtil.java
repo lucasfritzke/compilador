@@ -57,6 +57,10 @@ public class CompiladorUtil {
 		fd.setFile("*.txt");
 		fd.setVisible(true);
 
+		JTextArea jTextArea1 = new JTextArea();
+		jTextArea1 = (JTextArea) getComponentByName("MessageBlock");
+		jTextArea1.setText("");
+
 		File[] f = fd.getFiles();
 
 		if (f.length > 0) {
@@ -201,11 +205,8 @@ public class CompiladorUtil {
 		} catch (SyntaticError e) {
 
 			contLinha = this.getLinha(codigoFonte, e.getPosition());
-
 			// CASO SEJA UMA PALAVRA RESERVADA INVALIDA
-
 			String token = this.verificarClasse(sintatico.getToken());
-			System.out.println(token);
 			if (token.equals("palavra reservada")) {
 				contPos = e.getPosition();
 				token ="";
