@@ -169,14 +169,8 @@ public class CompiladorUtil {
 
 		catch (LexicalError e) {
 			// Trata erros léxicos, conforme especificação da parte 2 - do compilador
-			// Contador de quebras de linha 
-			/*
-			while (contPos <= e.getPosition()) {
-				if (codigoFonte.charAt(contPos) == '\n') {
-					contLinha++;
-				}
-				contPos++;
-			} */
+			// Contador de quebras de linha
+
 			contLinha = this.getLinha(codigoFonte, e.getPosition());
 			String str = "";
 			contPos = e.getPosition();
@@ -186,7 +180,7 @@ public class CompiladorUtil {
 
 			} else if (e.getMessage().equals("comentario de bloco invalido ou nao finalizado") ||
 					e.getMessage().equals("constante_string invalida")) {
-				messageBlock.setText("Linha " + contLinha + ": " + e.getMessage());
+				messageBlock.setText("Erro na linha " + contLinha + ": " + e.getMessage());
 				return;
 			} else {
 
@@ -202,19 +196,13 @@ public class CompiladorUtil {
 				}
 
 			}
-			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
+			messageBlock.setText("Erro na linha " + contLinha + ": " + str + " " + e.getMessage());
 
 		} catch (SyntaticError e) {
-			/* 
-			while (contPos <= e.getPosition()) {
-				if (codigoFonte.charAt(contPos) == '\n') {
-					contLinha++;
-				}
-				contPos++;
-			}*/
+
 			contLinha = this.getLinha(codigoFonte, e.getPosition());
 
-			String token = (sintatico.getToken().equals("$")) ? "EOF" : this.verificarClasse(sintatico.getToken());
+			String token = this.verificarClasse(sintatico.getToken());
 			messageBlock.setText("Erro na linha " + contLinha + " - encontrado " + token + " " + e.getMessage());
 
 		} catch (SemanticError e) {
@@ -231,21 +219,23 @@ public class CompiladorUtil {
 			return "constante_float";
 		} else if (id == 5) {
 			return "constante_string";
+		} else if (id == 1) {
+			return "EOF";
 		} else {
 			return t.getLexeme();
 		}
 
 	}
 
-	private int getLinha(String codigoFonte, int positionError){
-		int contPos=0;
-		int contLinha=1;
+	private int getLinha(String codigoFonte, int positionError) {
+		int contPos = 0;
+		int contLinha = 1;
 		while (contPos <= positionError) {
-				if (codigoFonte.charAt(contPos) == '\n') {
-					contLinha++;
-				}
-				contPos++;
+			if (codigoFonte.charAt(contPos) == '\n') {
+				contLinha++;
 			}
+			contPos++;
+		}
 		return contLinha;
 	}
 
