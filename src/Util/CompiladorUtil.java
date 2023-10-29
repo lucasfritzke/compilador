@@ -202,8 +202,28 @@ public class CompiladorUtil {
 
 			contLinha = this.getLinha(codigoFonte, e.getPosition());
 
+			// CASO SEJA UMA PALAVRA RESERVADA INVALIDA
+
 			String token = this.verificarClasse(sintatico.getToken());
-			messageBlock.setText("Erro na linha " + contLinha + " - encontrado " + token + " " + e.getMessage());
+			System.out.println(token);
+			if (token.equals("palavra reservada")) {
+				contPos = e.getPosition();
+				token ="";
+				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
+					contPos--;
+				}
+				contPos++;
+				while (contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' '
+						&& codigoFonte.charAt(contPos) != '\n') {
+					token += codigoFonte.charAt(contPos);
+					contPos++;
+				}
+
+				messageBlock.setText(
+						"Erro na linha " + contLinha + ": " + token + " palavra reservada invalida");
+			} else {
+				messageBlock.setText("Erro na linha " + contLinha + " - encontrado " + token + " " + e.getMessage());
+			}
 
 		} catch (SemanticError e) {
 			// Trata erros semânticos
@@ -213,6 +233,7 @@ public class CompiladorUtil {
 
 	private String verificarClasse(Token t) {
 		int id = t.getId();
+		
 		if (id == 3) {
 			return "constante_int";
 		} else if (id == 4) {
@@ -221,10 +242,12 @@ public class CompiladorUtil {
 			return "constante_string";
 		} else if (id == 1) {
 			return "EOF";
+		} else if (id == 6) {
+			return "palavra reservada";
 		} else {
 			return t.getLexeme();
 		}
-
+		
 	}
 
 	private int getLinha(String codigoFonte, int positionError) {
