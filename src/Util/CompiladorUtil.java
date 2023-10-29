@@ -156,13 +156,11 @@ public class CompiladorUtil {
 		int contLinha = 1;
 		int contPos = 0;
 		String codigoFonte = codeBlock.getText();
-
 		Lexico lexico = new Lexico();
 		Sintatico sintatico = new Sintatico();
 		Semantico semantico = new Semantico();
-		// ...
 		lexico.setInput(codigoFonte);
-		// ...
+
 		try {
 			sintatico.parse(lexico, semantico); // tradução dirigida pela sintaxe
 			messageBlock.setText("programa compilado com sucesso");
@@ -171,22 +169,23 @@ public class CompiladorUtil {
 
 		catch (LexicalError e) {
 			// Trata erros léxicos, conforme especificação da parte 2 - do compilador
-			// Contador de quebras de linha
+			// Contador de quebras de linha 
+			/*
 			while (contPos <= e.getPosition()) {
 				if (codigoFonte.charAt(contPos) == '\n') {
 					contLinha++;
 				}
 				contPos++;
-			}
-
+			} */
+			contLinha = this.getLinha(codigoFonte, e.getPosition());
 			String str = "";
 			contPos = e.getPosition();
 
-			if (e.getMessage().equals("Símbolo inválido")) {
+			if (e.getMessage().equals("Simbolo invalido")) {
 				str += codigoFonte.charAt(contPos);
 
-			} else if (e.getMessage().equals("comentário de bloco inválido ou não finalizado") ||
-					e.getMessage().equals("constante_string inválida")) {
+			} else if (e.getMessage().equals("comentario de bloco invalido ou nao finalizado") ||
+					e.getMessage().equals("constante_string invalida")) {
 				messageBlock.setText("Linha " + contLinha + ": " + e.getMessage());
 				return;
 			} else {
@@ -206,16 +205,18 @@ public class CompiladorUtil {
 			messageBlock.setText("Linha " + contLinha + ": " + str + " " + e.getMessage());
 
 		} catch (SyntaticError e) {
-
+			/* 
 			while (contPos <= e.getPosition()) {
 				if (codigoFonte.charAt(contPos) == '\n') {
 					contLinha++;
 				}
 				contPos++;
-			}
+			}*/
+			contLinha = this.getLinha(codigoFonte, e.getPosition());
 
 			String token = (sintatico.getToken().equals("$")) ? "EOF" : this.verificarClasse(sintatico.getToken());
 			messageBlock.setText("Erro na linha " + contLinha + " - encontrado " + token + " " + e.getMessage());
+
 		} catch (SemanticError e) {
 			// Trata erros semânticos
 		}
@@ -234,6 +235,18 @@ public class CompiladorUtil {
 			return t.getLexeme();
 		}
 
+	}
+
+	private int getLinha(String codigoFonte, int positionError){
+		int contPos=0;
+		int contLinha=1;
+		while (contPos <= positionError) {
+				if (codigoFonte.charAt(contPos) == '\n') {
+					contLinha++;
+				}
+				contPos++;
+			}
+		return contLinha;
 	}
 
 	public void metodoMostraEquipe() {
