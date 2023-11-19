@@ -9,6 +9,7 @@ public class Sintatico implements Constants
     private Token previousToken;
     private Lexico scanner;
     private Semantico semanticAnalyser;
+    private String buffer;
 
     private static final boolean isTerminal(int x)
     {
@@ -70,7 +71,7 @@ public class Sintatico implements Constants
         }
         else // isSemanticAction(x)
         {
-            semanticAnalyser.executeAction(x-FIRST_SEMANTIC_ACTION, previousToken);
+            buffer +=  semanticAnalyser.executeAction(x-FIRST_SEMANTIC_ACTION, previousToken);
             return false;
         }
     }
