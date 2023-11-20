@@ -168,6 +168,7 @@ public class CompiladorUtil {
 
 		try {
 			sintatico.parse(lexico, semantico); // tradução dirigida pela sintaxe
+			semantico.createFile(path);
 			messageBlock.setText("programa compilado com sucesso");
 		}
 		// mensagem: programa compilado com sucesso - área reservada para mensagens
