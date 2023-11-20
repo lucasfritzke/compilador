@@ -8,13 +8,7 @@ public class Semantico implements Constants {
         System.out.println("A��o #" + action + ", Token: " + token);
         String str ="";
 
-        switch (action) {
-            case 105:
-                return "conv.r";
-        
-            default:
-                return " ";
-        }
+        return null;
     
     }
 
