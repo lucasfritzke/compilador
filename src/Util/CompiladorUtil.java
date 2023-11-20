@@ -160,6 +160,7 @@ public class CompiladorUtil {
 		int contLinha = 1;
 		int contPos = 0;
 		String codigoFonte = codeBlock.getText();
+		codigoFonte += " ";
 		Lexico lexico = new Lexico();
 		Sintatico sintatico = new Sintatico();
 		Semantico semantico = new Semantico();
