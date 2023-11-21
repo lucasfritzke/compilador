@@ -10,32 +10,63 @@ import java.util.Stack;
 
 public class Semantico implements Constants {
 
-    Semantico(String name){
-        filename = name;
-    }
+
     private String filename;
-    private Stack<String> pilha_tipos;
+    private Stack<String> pilha_tipos = new Stack<String>();
     private Stack<String> pilha_rotulos;
     private ArrayList<String> lista_id;
-    private String buffer;
+
+    private String buffer = "";
+
+    public Semantico(String name){
+        this.filename = name;
+    }
 
     //1º) #100, #101, #102, #114, #115
     public void  executeAction(int action, Token token) throws SemanticError {
         //buffer += "A��o #" + action + ", Token: " + token;
-        //System.out.println("A��o #" + action + ", Token: " + token);
+        System.out.println("A��o #" + action + ", Token: " + token);
 
-
+        String tipo="";
         switch (action) {
+    
             case 100:
                 buffer += (".assembly extern mscorlib {}\n"
                 + ".assembly _exemplo{}\n"
                 + ".module _exemplo.exe\n"
                 + "\n"
-                + ".class {{@}}");
+                + ".class public"+filename+" {\n"
+                + ".method static public void _principal(){\n"
+                + ".entrypoint\n");
                 break;
-        
+            case 101:
+                buffer += ("ret\n"
+                + "}\n"
+                + "}");
+                break;
+            case 114:
+                tipo = "int64";
+                pilha_tipos.push(tipo);
+                buffer += "ldc.i8 "+token.getLexeme()+"\n";
+                buffer += "conv.r8\n";
+                break;
+            case 115:
+                tipo = "float64";
+                pilha_tipos.push(tipo);
+                buffer += "ldc.r8 "+token.getLexeme()+"\n";
+                break;
+            case 102:
+                tipo = pilha_tipos.pop();
+                if(tipo.equals("int64")){
+                    buffer +="conv.i8\n";
+                } 
+                buffer +="call void [mscorlib]System.Console::WriteLine("+tipo+")\n";
+
+                break;
             default:
                 break;
+            
+
         }
 
     }
@@ -62,7 +93,6 @@ public class Semantico implements Constants {
         return fileName;
     }
     
-
     
 
 }

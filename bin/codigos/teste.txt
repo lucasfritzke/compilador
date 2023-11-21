@@ -1,1 +1,4 @@
-fun main {	out("ola");}
+fun main {	
+	out(10);
+	out(10.5);
+}

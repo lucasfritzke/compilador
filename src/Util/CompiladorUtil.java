@@ -163,7 +163,7 @@ public class CompiladorUtil {
 		codigoFonte += " ";
 		Lexico lexico = new Lexico();
 		Sintatico sintatico = new Sintatico();
-		Semantico semantico = new Semantico();
+		Semantico semantico = new Semantico("teste");
 		lexico.setInput(codigoFonte);
 
 		try {
