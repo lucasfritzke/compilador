@@ -1,5 +1,5 @@
 package gals;
-
+import java.util.regex.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -67,9 +67,18 @@ public class Semantico implements Constants {
                 buffer +="call void [mscorlib]System.Console::WriteLine("+tipo+")\n";
 
                 break;
-            case 110:
-                
-            default:
+            case 125:
+                lista_id.add(token.getLexeme());
+                break;
+            case 126:
+                // verificar se o identificador foi declarado, ou seja, se está na tabela_simbolos; 
+                if(tabela_simbolos.containsKey(token.getLexeme())){
+                    //em caso positivo, encerrar a execução e apontar erro semantico, indicando a linha e apresentando a mensagem token.getLexeme já declarado
+                    throw new SemanticError(token.getLexeme() + " ja declarado");
+                } else {
+                    // 
+                }
+            default:    
                 break;
             
 
@@ -99,6 +108,10 @@ public class Semantico implements Constants {
         return fileName;
     }
     
-    
+
+    public String tipoVariavel(String var){
+        Matcher matcher;
+        return null;
+    }
 
 }
