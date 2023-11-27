@@ -1,4 +1,5 @@
 package gals;
+
 import java.util.regex.*;
 import java.io.File;
 import java.io.IOException;
@@ -13,104 +14,135 @@ import Util.CelulaTabelaSimbolos;
 
 public class Semantico implements Constants {
 
-
     private String filename;
     private Stack<String> pilha_tipos = new Stack<String>();
     private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
     private Stack<String> pilha_rotulos;
-    private ArrayList<String> lista_id;
+    private ArrayList<Token> lista_id;
 
     private String buffer = "";
 
-    public Semantico(String name){
+    public Semantico(String name) {
         this.filename = name;
     }
 
-    //1º) #100, #101, #102, #114, #115
-    public void  executeAction(int action, Token token) throws SemanticError {
-        //buffer += "A��o #" + action + ", Token: " + token;
+    // 1º) #100, #101, #102, #114, #115
+    public void executeAction(int action, Token token) throws SemanticError {
+        // buffer += "A��o #" + action + ", Token: " + token;
         System.out.println("A��o #" + action + ", Token: " + token);
 
-        String tipo="";
+        String tipo = "";
         switch (action) {
-    
+
             case 100:
                 buffer += (".assembly extern mscorlib {}\n"
-                + ".assembly _exemplo{}\n"
-                + ".module _exemplo.exe\n"
-                + "\n"
-                + ".class public "+filename+" {\n"
-                + ".method static public void _principal(){\n"
-                + ".entrypoint\n");
+                        + ".assembly _exemplo{}\n"
+                        + ".module _exemplo.exe\n"
+                        + "\n"
+                        + ".class public " + filename + " {\n"
+                        + ".method static public void _principal(){\n"
+                        + ".entrypoint\n");
                 break;
             case 101:
                 buffer += ("ret\n"
-                + "}\n"
-                + "}");
+                        + "}\n"
+                        + "}");
                 break;
             case 114:
                 tipo = "int64";
                 pilha_tipos.push(tipo);
-                buffer += "ldc.i8 "+token.getLexeme()+"\n";
+                buffer += "ldc.i8 " + token.getLexeme() + "\n";
                 buffer += "conv.r8\n";
                 break;
             case 115:
                 tipo = "float64";
                 pilha_tipos.push(tipo);
-                buffer += "ldc.r8 "+token.getLexeme()+"\n";
+                buffer += "ldc.r8 " + token.getLexeme() + "\n";
                 break;
             case 102:
                 tipo = pilha_tipos.pop();
-                if(tipo.equals("int64")){
-                    buffer +="conv.i8\n";
-                } 
-                buffer +="call void [mscorlib]System.Console::WriteLine("+tipo+")\n";
+                if (tipo.equals("int64")) {
+                    buffer += "conv.i8\n";
+                }
+                buffer += "call void [mscorlib]System.Console::WriteLine(" + tipo + ")\n";
 
                 break;
             case 125:
-                lista_id.add(token.getLexeme());
+                lista_id.add(token);
                 break;
             case 126:
-                // verificar se o identificador foi declarado, ou seja, se está na tabela_simbolos; 
-                if(tabela_simbolos.containsKey(token.getLexeme())){
-                    //em caso positivo, encerrar a execução e apontar erro semantico, indicando a linha e apresentando a mensagem token.getLexeme já declarado
-                    throw new SemanticError(token.getLexeme() + " ja declarado");
-                } else {
-                    // 
+                // verificar se o identificador foi declarado, ou seja, se está na
+                // tabela_simbolos;
+                for (Token t : lista_id) {
+
+                    if (tabela_simbolos.containsKey(t.getLexeme())) {
+                        // em caso positivo, encerrar a execução e apontar erro semantico, indicando a
+                        // linha e apresentando a mensagem token.getLexeme já declarado
+                        throw new SemanticError(t.getLexeme() + " ja declarado", token.getPosition());
+                    } else {
+                        //
+                        CelulaTabelaSimbolos c = new CelulaTabelaSimbolos(
+                                t.getLexeme(),
+                                this.tipoVariavel(t.getLexeme()),
+                                token.getLexeme());
+                        tabela_simbolos.put(c.getIdentificador(), c);
+                    }
                 }
-            default:    
+                lista_id.clear();
                 break;
-            
+            case 110:
+
+            default:
+                break;
 
         }
 
     }
 
-    public void createFile(String path){
+    public void createFile(String path) {
 
-        try{
+        try {
             File file = new File(correctFileName(path));
-            if(file.createNewFile()){
+            if (file.createNewFile()) {
                 Path rawPath = Paths.get(file.getAbsolutePath());
                 Files.write(rawPath, buffer.getBytes());
                 System.out.println("FILE CREATED AT " + file.getAbsolutePath());
+            } else {
+                Path rawPath = Paths.get(file.getAbsolutePath());
+                Files.write(rawPath, buffer.getBytes());
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("File not created");
             e.printStackTrace();
         }
     }
 
-    public String correctFileName(String fileName){
-        if(fileName.endsWith(".txt")){
+    public String correctFileName(String fileName) {
+        if (fileName.endsWith(".txt")) {
             fileName = fileName.replace(".txt", ".il");
         }
         return fileName;
     }
-    
 
-    public String tipoVariavel(String var){
-        Matcher matcher;
+    public String tipoVariavel(String var) {
+
+        if (var.charAt(1) == 'i') {
+            return "int64";
+        } else if (var.charAt(1) == 'f') {
+            return "float64";
+        } else if (var.charAt(1) == 's') {
+            return "string";
+        } else {
+            return "bool";
+        }
+    }
+
+    public String verificarTipoResultante(String t1, String t2, String op){
+
+        if(t1.equals("int64") && t2.equals("int64")){
+            return "int64";
+        }
+
         return null;
     }
 

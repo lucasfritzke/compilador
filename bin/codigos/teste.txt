@@ -1,4 +1,4 @@
 fun main {	
-	out(10);
+	out(12);
 	out(10.5);
 }
