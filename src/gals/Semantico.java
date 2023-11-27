@@ -6,13 +6,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
+
+import Util.CelulaTabelaSimbolos;
 
 public class Semantico implements Constants {
 
 
     private String filename;
     private Stack<String> pilha_tipos = new Stack<String>();
+    private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
     private Stack<String> pilha_rotulos;
     private ArrayList<String> lista_id;
 
@@ -35,7 +39,7 @@ public class Semantico implements Constants {
                 + ".assembly _exemplo{}\n"
                 + ".module _exemplo.exe\n"
                 + "\n"
-                + ".class public"+filename+" {\n"
+                + ".class public "+filename+" {\n"
                 + ".method static public void _principal(){\n"
                 + ".entrypoint\n");
                 break;
@@ -63,6 +67,8 @@ public class Semantico implements Constants {
                 buffer +="call void [mscorlib]System.Console::WriteLine("+tipo+")\n";
 
                 break;
+            case 110:
+                
             default:
                 break;
             

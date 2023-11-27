@@ -2,7 +2,7 @@
 .assembly _exemplo{}
 .module _exemplo.exe
 
-.class teste {
+.class public teste {
 .method static public void _principal(){
 .entrypoint
 ldc.i8 10
