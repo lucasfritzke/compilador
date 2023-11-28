@@ -5,7 +5,7 @@
 .class public teste {
 .method static public void _principal(){
 .entrypoint
-ldc.i8 12
+ldc.i8 10
 conv.r8
 ldc.i8 5
 conv.r8

@@ -48,6 +48,36 @@ public class Semantico implements Constants {
                         + "}\n"
                         + "}");
                 break;
+            case 102:
+                tipo = pilha_tipos.pop();
+                if (tipo.equals("int64")) {
+                    buffer += "conv.i8\n";
+                }
+                buffer += "call void [mscorlib]System.Console::WriteLine(" + tipo + ")\n";
+
+                break;
+            case 103:
+                String t1 = pilha_tipos.pop();
+                String t2 = pilha_tipos.pop();
+                String tipoResult = this.verificarTipoResultante(t1, t2, "&");
+                pilha_tipos.push(tipoResult);
+                buffer += "and\n";
+                break;
+            case 104:
+                t1 = pilha_tipos.pop();
+                t2 = pilha_tipos.pop();
+                tipoResult = this.verificarTipoResultante(t1, t2, "|");
+                pilha_tipos.push(tipoResult);
+                buffer += "or\n";
+                break;
+            case 105:
+                pilha_tipos.push("bool");
+                buffer +="ldc.i4.1\n";
+                break;
+            case 106:
+                pilha_tipos.push("bool");
+                buffer +="ldc.i4.0\n";
+                break;
             case 114:
                 tipo = "int64";
                 pilha_tipos.push(tipo);
@@ -59,14 +89,7 @@ public class Semantico implements Constants {
                 pilha_tipos.push(tipo);
                 buffer += "ldc.r8 " + token.getLexeme() + "\n";
                 break;
-            case 102:
-                tipo = pilha_tipos.pop();
-                if (tipo.equals("int64")) {
-                    buffer += "conv.i8\n";
-                }
-                buffer += "call void [mscorlib]System.Console::WriteLine(" + tipo + ")\n";
 
-                break;
             case 125:
                 lista_id.add(token);
                 break;
@@ -91,7 +114,41 @@ public class Semantico implements Constants {
                 lista_id.clear();
                 break;
             case 110:
-
+                // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
+                // conforme indicado na TABELA DE TIPOS;
+                t1 = pilha_tipos.pop();
+                t2 = pilha_tipos.pop();
+                tipoResult = this.verificarTipoResultante(t1, t2, "+");
+                pilha_tipos.push(tipoResult);
+                buffer += "add \n";
+                break;
+            case 111:
+                // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
+                // conforme indicado na TABELA DE TIPOS;
+                t1 = pilha_tipos.pop();
+                t2 = pilha_tipos.pop();
+                tipoResult = this.verificarTipoResultante(t1, t2, "-");
+                pilha_tipos.push(tipoResult);
+                buffer += "sub \n";
+                break;
+            case 112:
+                // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
+                // conforme indicado na TABELA DE TIPOS;
+                t1 = pilha_tipos.pop();
+                t2 = pilha_tipos.pop();
+                tipoResult = this.verificarTipoResultante(t1, t2, "*");
+                pilha_tipos.push(tipoResult);
+                buffer += "mul \n";
+                break;
+            case 113:
+                // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
+                // conforme indicado na TABELA DE TIPOS;
+                t1 = pilha_tipos.pop();
+                t2 = pilha_tipos.pop();
+                tipoResult = this.verificarTipoResultante(t1, t2, "/");
+                pilha_tipos.push(tipoResult);
+                buffer += "div \n";
+                break;
             default:
                 break;
 
@@ -137,13 +194,36 @@ public class Semantico implements Constants {
         }
     }
 
-    public String verificarTipoResultante(String t1, String t2, String op){
+    public String verificarTipoResultante(String t1, String t2, String op) {
 
-        if(t1.equals("int64") && t2.equals("int64")){
-            return "int64";
+        if (t1.equals("int64") && t2.equals("int64")) {
+            if (mathematicalOperatorExists(op)) {
+                return "int64";
+            }
+            return "bool";
+        } else if (t1.equals("int64") && t2.equals("float64") ||
+                t1.equals("float64") && t2.equals("int64") ||
+                t1.equals("float64") && t2.equals("float64")) {
+            if (!mathematicalOperatorExists(op)) {
+                return "bool";
+            }
+            return "float64";
+        } else if (t1.equals("bool") && t2.equals("bool") ||
+                t1.equals("string") && t2.equals("string")) {
+            return "bool";
         }
 
         return null;
+    }
+
+    private boolean mathematicalOperatorExists(String op) {
+        String[] operatorArr = { "-", "+", "*", "/" };
+        for (String c : operatorArr) {
+            if (op.equals(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

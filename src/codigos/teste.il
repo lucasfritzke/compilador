@@ -5,10 +5,11 @@
 .class public teste {
 .method static public void _principal(){
 .entrypoint
-ldc.i8 13
+ldc.i8 12
 conv.r8
-ldc.i8 2
+ldc.i8 5
 conv.r8
+add 
 conv.i8
 call void [mscorlib]System.Console::WriteLine(int64)
 ret
