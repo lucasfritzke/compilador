@@ -84,6 +84,16 @@ public class Semantico implements Constants {
                 buffer += "ldc.i4.1 \n"
                         + "xor\n";
                 break;
+            case 108:
+
+
+
+                break;
+            case 109:
+
+
+
+                break;
             case 110:
                 // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
                 // conforme indicado na TABELA DE TIPOS;
@@ -111,6 +121,15 @@ public class Semantico implements Constants {
                 pilha_tipos.push(tipoResult);
                 buffer += "mul \n";
                 break;
+            case 113:
+                // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
+                // conforme indicado na TABELA DE TIPOS;
+                t1 = pilha_tipos.pop();
+                t2 = pilha_tipos.pop();
+                tipoResult = this.verificarTipoResultante(t1, t2, "/");
+                pilha_tipos.push(tipoResult);
+                buffer += "div \n";
+                break;
             case 114:
                 tipo = "int64";
                 pilha_tipos.push(tipo);
@@ -122,14 +141,10 @@ public class Semantico implements Constants {
                 pilha_tipos.push(tipo);
                 buffer += "ldc.r8 " + token.getLexeme() + "\n";
                 break;
-            case 113:
-                // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
-                // conforme indicado na TABELA DE TIPOS;
-                t1 = pilha_tipos.pop();
-                t2 = pilha_tipos.pop();
-                tipoResult = this.verificarTipoResultante(t1, t2, "/");
-                pilha_tipos.push(tipoResult);
-                buffer += "div \n";
+            case 116:
+                tipo = "string";
+                pilha_tipos.push(tipo);
+                buffer += "ldstr "+token.getLexeme()+"\n";
                 break;
             case 125:
                 lista_id.add(token);
