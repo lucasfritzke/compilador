@@ -72,46 +72,17 @@ public class Semantico implements Constants {
                 break;
             case 105:
                 pilha_tipos.push("bool");
-                buffer +="ldc.i4.1\n";
+                buffer += "ldc.i4.1\n";
                 break;
             case 106:
                 pilha_tipos.push("bool");
-                buffer +="ldc.i4.0\n";
+                buffer += "ldc.i4.0\n";
                 break;
-            case 114:
-                tipo = "int64";
-                pilha_tipos.push(tipo);
-                buffer += "ldc.i8 " + token.getLexeme() + "\n";
-                buffer += "conv.r8\n";
-                break;
-            case 115:
-                tipo = "float64";
-                pilha_tipos.push(tipo);
-                buffer += "ldc.r8 " + token.getLexeme() + "\n";
-                break;
-
-            case 125:
-                lista_id.add(token);
-                break;
-            case 126:
-                // verificar se o identificador foi declarado, ou seja, se está na
-                // tabela_simbolos;
-                for (Token t : lista_id) {
-
-                    if (tabela_simbolos.containsKey(t.getLexeme())) {
-                        // em caso positivo, encerrar a execução e apontar erro semantico, indicando a
-                        // linha e apresentando a mensagem token.getLexeme já declarado
-                        throw new SemanticError(t.getLexeme() + " ja declarado", token.getPosition());
-                    } else {
-                        //
-                        CelulaTabelaSimbolos c = new CelulaTabelaSimbolos(
-                                t.getLexeme(),
-                                this.tipoVariavel(t.getLexeme()),
-                                token.getLexeme());
-                        tabela_simbolos.put(c.getIdentificador(), c);
-                    }
-                }
-                lista_id.clear();
+            case 107:
+                t1 = pilha_tipos.pop();
+                pilha_tipos.push("bool");
+                buffer += "ldc.i4.1 \n"
+                        + "xor\n";
                 break;
             case 110:
                 // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
@@ -140,6 +111,17 @@ public class Semantico implements Constants {
                 pilha_tipos.push(tipoResult);
                 buffer += "mul \n";
                 break;
+            case 114:
+                tipo = "int64";
+                pilha_tipos.push(tipo);
+                buffer += "ldc.i8 " + token.getLexeme() + "\n";
+                buffer += "conv.r8\n";
+                break;
+            case 115:
+                tipo = "float64";
+                pilha_tipos.push(tipo);
+                buffer += "ldc.r8 " + token.getLexeme() + "\n";
+                break;
             case 113:
                 // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
                 // conforme indicado na TABELA DE TIPOS;
@@ -149,6 +131,30 @@ public class Semantico implements Constants {
                 pilha_tipos.push(tipoResult);
                 buffer += "div \n";
                 break;
+            case 125:
+                lista_id.add(token);
+                break;
+            case 126:
+                // verificar se o identificador foi declarado, ou seja, se está na
+                // tabela_simbolos;
+                for (Token t : lista_id) {
+
+                    if (tabela_simbolos.containsKey(t.getLexeme())) {
+                        // em caso positivo, encerrar a execução e apontar erro semantico, indicando a
+                        // linha e apresentando a mensagem token.getLexeme já declarado
+                        throw new SemanticError(t.getLexeme() + " ja declarado", token.getPosition());
+                    } else {
+                        //
+                        CelulaTabelaSimbolos c = new CelulaTabelaSimbolos(
+                                t.getLexeme(),
+                                this.tipoVariavel(t.getLexeme()),
+                                token.getLexeme());
+                        tabela_simbolos.put(c.getIdentificador(), c);
+                    }
+                }
+                lista_id.clear();
+                break;
+
             default:
                 break;
 
