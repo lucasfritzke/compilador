@@ -7,10 +7,11 @@
 .entrypoint
 ldc.i8 2
 conv.r8
-ldc.i8 5
+ldc.i8 2
 conv.r8
-ldstr "oi"
-call void [mscorlib]System.Console::WriteLine(string)
+add 
+conv.i8
+call void [mscorlib]System.Console::WriteLine(int64)
 ret
 }
 }
