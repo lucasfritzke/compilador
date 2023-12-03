@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
-import Util.CelulaTabelaSimbolos;
+//import Util.CelulaTabelaSimbolos;
 
 public class Semantico implements Constants {
 
     private String filename;
     private Stack<String> pilha_tipos = new Stack<String>();
-    private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
+    //private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
     private Stack<String> pilha_rotulos;
     private ArrayList<Token> lista_id;
 
@@ -84,13 +84,9 @@ public class Semantico implements Constants {
                         + "xor\n";
                 break;
             case 108:
-
-
-
+*
                 break;
             case 109:
-
-
 
                 break;
             case 110:
@@ -145,13 +141,30 @@ public class Semantico implements Constants {
                 pilha_tipos.push(tipo);
                 buffer += "ldstr "+token.getLexeme()+"\n";
                 break;
+            case 117:
+                t1 = pilha_tipos.pop();
+                if(t1.equals("int64")){
+                    t2 = "int64";
+                    pilha_tipos.push(t2);
+
+                    buffer += "ldc.i8 -1";
+                    buffer += "conv r8";
+                    buffer += "mul";
+                }else if(t1.equals("float64")){
+                    t2 = "float64";
+                    pilha_tipos.push(t2);
+
+                    buffer += "ldc.r8 -1";
+                    buffer += "mul";
+                }
+                break;
             case 125:
                 lista_id.add(token);
                 break;
             case 126:
                 // verificar se o identificador foi declarado, ou seja, se está na
                 // tabela_simbolos;
-                for (Token t : lista_id) {
+                /*for (Token t : lista_id) {
 
                     if (tabela_simbolos.containsKey(t.getLexeme())) {
                         // em caso positivo, encerrar a execução e apontar erro semantico, indicando a
@@ -167,7 +180,7 @@ public class Semantico implements Constants {
                     }
                 }
                 lista_id.clear();
-                break;
+                break;*/
 
             default:
                 break;
