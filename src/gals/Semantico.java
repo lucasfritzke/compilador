@@ -9,15 +9,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
+import Util.CelulaTabelaSimbolos;
+
 //import Util.CelulaTabelaSimbolos;
 
 public class Semantico implements Constants {
 
     private String filename;
     private Stack<String> pilha_tipos = new Stack<String>();
-    //private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
+    private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
     private Stack<String> pilha_rotulos;
-    private ArrayList<Token> lista_id;
+    private ArrayList<Token> lista_id = new ArrayList<Token>();
     private String operador_relacional;
 
     private String buffer = "";
@@ -85,11 +87,11 @@ public class Semantico implements Constants {
                         + "xor\n";
                 break;
             case 108:
-                //<operador_relacional>::= "==" | "!=" | "<" | ">" ;
+                // <operador_relacional>::= "==" | "!=" | "<" | ">" ;
                 operador_relacional = verificarOperadorRelacional(operador_relacional);
                 break;
             case 109:
-                //Feito em parte
+                // Feito em parte
                 t1 = pilha_tipos.pop();
                 t2 = pilha_tipos.pop();
                 tipoResult = this.verificarTipoResultante(t1, t2, operador_relacional);
@@ -145,18 +147,18 @@ public class Semantico implements Constants {
             case 116:
                 tipo = "string";
                 pilha_tipos.push(tipo);
-                buffer += "ldstr "+token.getLexeme()+"\n";
+                buffer += "ldstr " + token.getLexeme() + "\n";
                 break;
             case 117:
                 t1 = pilha_tipos.pop();
-                if(t1.equals("int64")){
+                if (t1.equals("int64")) {
                     t2 = "int64";
                     pilha_tipos.push(t2);
 
                     buffer += "ldc.i8 -1" + "\n";
                     buffer += "conv.r8" + "\n";
                     buffer += "mul" + "\n";
-                }else if(t1.equals("float64")){
+                } else if (t1.equals("float64")) {
                     t2 = "float64";
                     pilha_tipos.push(t2);
 
@@ -165,14 +167,15 @@ public class Semantico implements Constants {
                 }
                 break;
             case 118:
-                //Incompleto
+                // Incompleto
                 t1 = pilha_tipos.pop();
-                if(t1.equals("bool")){
+                if (t1.equals("bool")) {
                     String novo_rotulo1 = "";
                     buffer += "brfalse novo_rotulo1" + "\n";
                     pilha_rotulos.add(novo_rotulo1);
-                }else{
-                    //Encerrar  a  execução  e  apontar  erro  semântico,  indicando  a  linha  e  apresentando  a mensagem expressão incompatível em comando de seleção;
+                } else {
+                    // Encerrar a execução e apontar erro semântico, indicando a linha e
+                    // apresentando a mensagem expressão incompatível em comando de seleção;
                 }
                 break;
             case 119:
@@ -186,34 +189,67 @@ public class Semantico implements Constants {
             case 123:
                 break;
             case 124:
-                break;    
+                break;
             case 125:
                 lista_id.add(token);
-                buffer += "token.getLexeme" + "\n";
+                //buffer += "token.getLexeme" + "\n";
                 break;
             case 126:
-                // verificar se o identificador foi declarado, ou seja, se está na
-                // tabela_simbolos;
-                /*for (Token t : lista_id) {
-
+                for (Token t : lista_id) {
+                    // verificar se o identificador foi declarado, ou seja, se está na
+                    // tabela_simbolos
                     if (tabela_simbolos.containsKey(t.getLexeme())) {
-                        // em caso positivo, encerrar a execução e apontar erro semantico, indicando a
-                        // linha e apresentando a mensagem token.getLexeme já declarado
                         throw new SemanticError(t.getLexeme() + " ja declarado", token.getPosition());
                     } else {
-                        //
                         CelulaTabelaSimbolos c = new CelulaTabelaSimbolos(
                                 t.getLexeme(),
                                 this.tipoVariavel(t.getLexeme()),
                                 token.getLexeme());
                         tabela_simbolos.put(c.getIdentificador(), c);
+                        buffer += ".locals (" + c.getTipo() + " " + c.getIdentificador() + ")\n";
                     }
                 }
-                lista_id.clear();*/
+                lista_id.clear();
                 break;
             case 127:
+                for (Token t : lista_id) {
+                    // verificar se o identificador foi declarado, ou seja, se está na
+                    // tabela_simbolos
+                    if (tabela_simbolos.containsKey(t.getLexeme())) {
+                        throw new SemanticError(t.getLexeme() + " ja declarado", token.getPosition());
+                    } else {
+                        CelulaTabelaSimbolos c = new CelulaTabelaSimbolos(
+                                t.getLexeme(),
+                                this.tipoVariavel(t.getLexeme()),
+                                null);
+                        tabela_simbolos.put(c.getIdentificador(), c);
+                        buffer += ".locals (" + c.getTipo() + " " + c.getIdentificador() + ")\n";
+                    }
+                }
+                lista_id.clear();
                 break;
             case 128:
+                // (a) desempilhar o tipo da <expressão> da pilha_tipos;
+                tipo = pilha_tipos.pop();
+                // (b) gerar o código objeto dup n vezes, onde n é igual a quantidade de
+                // identificadores da lista_id menos 1;
+                for (int i = 0; i < (lista_id.size() - 1); i++) {
+                    buffer += "dup \n";
+                }
+                // (c) para cada identificador da lista_id:
+                for (Token t : lista_id) {
+                    // verificar se o identificador foi declarado, ou seja, se está na
+                    // tabela_simbolos
+                    if (!tabela_simbolos.containsKey(t.getLexeme())) {
+                        throw new SemanticError(t.getLexeme() + " não declarado", token.getPosition());
+                    } else {
+                        if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("int64")) {
+                            buffer += "conv.i8 \n";
+                        }
+                        buffer += "stloc " + t.getLexeme() + "\n";
+                    }
+                }
+                lista_id.clear();
                 break;
             case 129:
                 break;
@@ -222,7 +258,28 @@ public class Semantico implements Constants {
                 buffer += "call  void  [mscorlib]System.Console::Write (string)" + "\n";
                 break;
             case 131:
+                // (a) verificar se o identificador (token.getLexeme) foi declarado, ou seja, se
+                // está na tabela_simbolos;
+                if (!tabela_simbolos.containsKey(token.getLexeme())) {
+                    // em caso negativo, encerrar a execução e apontar erro semântico, indicando a
+                    // linha e apresentam a mensagem token.getLexeme não declarado (por exemplo:
+                    // _iarea não declarado);
+                    throw new SemanticError(token.getLexeme() + " não declarado", token.getPosition());
+                } else {
+                    CelulaTabelaSimbolos c = tabela_simbolos.get(token.getLexeme());
+                    // (c) em caso positivo e é identificador de constante:
+                    if (c.getValor() != null) {
+                        if (c.getTipo().equals("int64")) {
+                            buffer += "ldc.i8 " + c.getValor() + "\n";
+                            buffer += "conv.r8 \n";
+                            pilha_tipos.push(c.getTipo());
+                        } else if (c.getTipo().equals("string")) {
+                            buffer += "ldstr " + c.getValor() + "\n";
+                        }
+                    }
+                }
                 break;
+
             default:
                 break;
 
@@ -290,9 +347,10 @@ public class Semantico implements Constants {
         return null;
     }
 
-    private String verificarOperadorRelacional(String operadorRelacional){
+    private String verificarOperadorRelacional(String operadorRelacional) {
 
-        if(operadorRelacional.equals("==") || operadorRelacional.equals("!=") || operadorRelacional.equals("<") || operadorRelacional.equals(">")){
+        if (operadorRelacional.equals("==") || operadorRelacional.equals("!=") || operadorRelacional.equals("<")
+                || operadorRelacional.equals(">")) {
             return operadorRelacional;
         }
 

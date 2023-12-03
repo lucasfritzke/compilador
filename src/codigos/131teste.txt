@@ -1,0 +1,4 @@
+fun main {	
+	_inum: -1;
+	out(-29 + _inum);
+}
