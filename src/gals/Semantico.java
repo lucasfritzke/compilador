@@ -18,6 +18,7 @@ public class Semantico implements Constants {
     //private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
     private Stack<String> pilha_rotulos;
     private ArrayList<Token> lista_id;
+    private String operador_relacional;
 
     private String buffer = "";
 
@@ -84,10 +85,15 @@ public class Semantico implements Constants {
                         + "xor\n";
                 break;
             case 108:
-*
+                //<operador_relacional>::= "==" | "!=" | "<" | ">" ;
+                operador_relacional = verificarOperadorRelacional(operador_relacional);
                 break;
             case 109:
-
+                //Feito em parte
+                t1 = pilha_tipos.pop();
+                t2 = pilha_tipos.pop();
+                tipoResult = this.verificarTipoResultante(t1, t2, operador_relacional);
+                pilha_tipos.push(tipoResult);
                 break;
             case 110:
                 // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
@@ -147,19 +153,43 @@ public class Semantico implements Constants {
                     t2 = "int64";
                     pilha_tipos.push(t2);
 
-                    buffer += "ldc.i8 -1";
-                    buffer += "conv r8";
-                    buffer += "mul";
+                    buffer += "ldc.i8 -1" + "\n";
+                    buffer += "conv.r8" + "\n";
+                    buffer += "mul" + "\n";
                 }else if(t1.equals("float64")){
                     t2 = "float64";
                     pilha_tipos.push(t2);
 
-                    buffer += "ldc.r8 -1";
-                    buffer += "mul";
+                    buffer += "ldc.r8 -1" + "\n";
+                    buffer += "mul" + "\n";
                 }
                 break;
+            case 118:
+                //Incompleto
+                t1 = pilha_tipos.pop();
+                if(t1.equals("bool")){
+                    String novo_rotulo1 = "";
+                    buffer += "brfalse novo_rotulo1" + "\n";
+                    pilha_rotulos.add(novo_rotulo1);
+                }else{
+                    //Encerrar  a  execução  e  apontar  erro  semântico,  indicando  a  linha  e  apresentando  a mensagem expressão incompatível em comando de seleção;
+                }
+                break;
+            case 119:
+                break;
+            case 120:
+                break;
+            case 121:
+                break;
+            case 122:
+                break;
+            case 123:
+                break;
+            case 124:
+                break;    
             case 125:
                 lista_id.add(token);
+                buffer += "token.getLexeme" + "\n";
                 break;
             case 126:
                 // verificar se o identificador foi declarado, ou seja, se está na
@@ -179,9 +209,20 @@ public class Semantico implements Constants {
                         tabela_simbolos.put(c.getIdentificador(), c);
                     }
                 }
-                lista_id.clear();
-                break;*/
-
+                lista_id.clear();*/
+                break;
+            case 127:
+                break;
+            case 128:
+                break;
+            case 129:
+                break;
+            case 130:
+                buffer += "ldstr" + "\n";
+                buffer += "call  void  [mscorlib]System.Console::Write (string)" + "\n";
+                break;
+            case 131:
+                break;
             default:
                 break;
 
@@ -244,6 +285,15 @@ public class Semantico implements Constants {
         } else if (t1.equals("bool") && t2.equals("bool") ||
                 t1.equals("string") && t2.equals("string")) {
             return "bool";
+        }
+
+        return null;
+    }
+
+    private String verificarOperadorRelacional(String operadorRelacional){
+
+        if(operadorRelacional.equals("==") || operadorRelacional.equals("!=") || operadorRelacional.equals("<") || operadorRelacional.equals(">")){
+            return operadorRelacional;
         }
 
         return null;

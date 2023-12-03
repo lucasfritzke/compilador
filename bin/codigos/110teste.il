@@ -9,7 +9,7 @@ ldc.i8 10
 conv.r8
 ldc.i8 5
 conv.r8
-sub 
+add 
 conv.i8
 call void [mscorlib]System.Console::WriteLine(int64)
 ret
