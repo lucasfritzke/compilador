@@ -18,9 +18,10 @@ public class Semantico implements Constants {
     private String filename;
     private Stack<String> pilha_tipos = new Stack<String>();
     private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
-    private Stack<String> pilha_rotulos;
+    private Stack<String> pilha_rotulos = new Stack<String>();
     private ArrayList<Token> lista_id = new ArrayList<Token>();
     private String operador_relacional;
+    private int rotulo_counter = 1;
 
     private String buffer = "";
 
@@ -170,29 +171,56 @@ public class Semantico implements Constants {
                 // Incompleto
                 t1 = pilha_tipos.pop();
                 if (t1.equals("bool")) {
-                    String novo_rotulo1 = "";
-                    buffer += "brfalse novo_rotulo1" + "\n";
+                    String novo_rotulo1 = "l" + rotulo_counter;
+                    buffer += "brfalse " + novo_rotulo1 + "\n";
                     pilha_rotulos.add(novo_rotulo1);
+                    rotulo_counter++;
                 } else {
                     // Encerrar a execução e apontar erro semântico, indicando a linha e
                     // apresentando a mensagem expressão incompatível em comando de seleção;
+                    throw new SemanticError(token.getLexeme() + " expressão incompatível em comando de seleção",
+                            token.getPosition());
                 }
                 break;
             case 119:
+                t1 = pilha_rotulos.pop();
+                buffer += t1 + ": " + "\n";
                 break;
             case 120:
+                String novo_rotulo2 = "l" + rotulo_counter;
+                buffer += "br " + novo_rotulo2 + "\n";
+                t1 = pilha_rotulos.pop();
+                buffer += t1 + ": " + "\n";
+                pilha_rotulos.push(novo_rotulo2);
+                rotulo_counter++;
                 break;
             case 121:
+                String novo_rotulo1 = "l" + rotulo_counter;
+                buffer += novo_rotulo1 + ": " + "\n";
+                pilha_rotulos.push(novo_rotulo1);
+                rotulo_counter++;
                 break;
             case 122:
+                t1 = pilha_tipos.pop();
+                if (!t1.equals("bool")) {
+                    throw new SemanticError(token.getLexeme() + " expressão incompatível em comando de repetição",
+                            token.getPosition());
+                }
+                novo_rotulo2 = "l" + rotulo_counter;
+                buffer += "brfalse " + novo_rotulo2 + "\n";
+                pilha_rotulos.push(novo_rotulo2);
+                rotulo_counter++;
                 break;
             case 123:
+                t1 = pilha_rotulos.pop();
+                t2 = pilha_rotulos.pop();
+                buffer += "br " + t2 + "\n";
+                buffer += t1 + ": " + "\n";
                 break;
             case 124:
                 break;
             case 125:
                 lista_id.add(token);
-                // buffer += "token.getLexeme" + "\n";
                 break;
             case 126:
                 for (Token t : lista_id) {
@@ -207,6 +235,26 @@ public class Semantico implements Constants {
                                 token.getLexeme());
                         tabela_simbolos.put(c.getIdentificador(), c);
                         buffer += ".locals (" + c.getTipo() + " " + c.getIdentificador() + ")\n";
+                        if (c.getValor() != null) {
+                            if (c.getTipo().equals("int64")) {
+                                buffer += "ldc.i8 " + c.getValor() + "\n";
+                                buffer += "stloc  " + t.getLexeme() + "\n";
+                            } else if (c.getTipo().equals("string")) {
+                                buffer += "ldstr " + c.getValor() + "\n";
+                                buffer += "stloc  " + t.getLexeme() + "\n";
+                            } else if (c.getTipo().equals("float64")) {
+                                buffer += "ldc.r8 " + c.getValor() + "\n";
+                                buffer += "stloc  " + t.getLexeme() + "\n";
+                            } else if (c.getTipo().equals("bool")) {
+                                if (c.getValor().equals("true")) {
+                                    buffer += "ldc.i4.1" + "\n";
+                                    buffer += "stloc  " + t.getLexeme() + "\n";
+                                } else {
+                                    buffer += "ldc.i4.0" + "\n";
+                                    buffer += "stloc  " + t.getLexeme() + "\n";
+                                }
+                            }
+                        }
                     }
                 }
                 lista_id.clear();
@@ -243,24 +291,49 @@ public class Semantico implements Constants {
                     if (!tabela_simbolos.containsKey(t.getLexeme())) {
                         throw new SemanticError(t.getLexeme() + " não declarado", token.getPosition());
                     } else {
-                        if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("int64")) {
+                        CelulaTabelaSimbolos c = tabela_simbolos.get(t.getLexeme());
+                        c.setValor(token.getLexeme());
+                        if (c.getTipo().equals("int64")) {
                             buffer += "conv.i8 \n";
+                            buffer += "stloc  " + t.getLexeme() + "\n";
+                        } else if (c.getTipo().equals("string")) {
+
+                            buffer += "stloc  " + t.getLexeme() + "\n";
+                        } else if (c.getTipo().equals("float64")) {
+
+                            buffer += "stloc  " + t.getLexeme() + "\n";
+                        } else if (c.getTipo().equals("bool")) {
+                            if (c.getValor().equals("true")) {
+
+                                buffer += "stloc  " + t.getLexeme() + "\n";
+                            } else {
+
+                                buffer += "stloc  " + t.getLexeme() + "\n";
+                            }
                         }
-                        buffer += "stloc " + t.getLexeme() + "\n";
                     }
                 }
                 lista_id.clear();
                 break;
             case 129:
-                
-                   for (Token t : lista_id) {
+                for (Token t : lista_id) {
                     // verificar se o identificador foi declarado, ou seja, se está na
                     // tabela_simbolos
                     if (!tabela_simbolos.containsKey(t.getLexeme())) {
                         throw new SemanticError(t.getLexeme() + " não declarado", token.getPosition());
                     } else {
+                        CelulaTabelaSimbolos c = tabela_simbolos.get(t.getLexeme());
                         if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("int64")) {
+                            buffer += "call int64 [mscorlib]System.Console::ReadLine() \n";
                             buffer += "conv.i8 \n";
+                        } else if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("float64")) {
+                            buffer += "call float64 [mscorlib]System.Console::ReadLine() \n";
+
+                        } else if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("string")) {
+                            buffer += "call string [mscorlib]System.Console::ReadLine() \n";
+
+                        } else if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("bool")) {
+                            buffer += "call bool [mscorlib]System.Console::ReadLine() \n";
                         }
                         buffer += "stloc " + t.getLexeme() + "\n";
                     }

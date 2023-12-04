@@ -1,0 +1,6 @@
+fun main {	
+	_inum1;
+	_inum1 = 0;
+	_inum1 = _inum1 + 1;
+	out(_inum1);
+}

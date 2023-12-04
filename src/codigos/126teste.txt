@@ -1,0 +1,12 @@
+fun main {	
+	 _inum1, _inum2: 3;
+	_stext: "Lucas";
+	_fnum: 1.235;
+	_bfalse: false;
+	_btrue: true;
+	out(_inum1);
+	out(_stext);
+	out(_fnum);
+	out(_bfalse);
+	out(_btrue);
+}

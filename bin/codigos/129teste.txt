@@ -1,0 +1,5 @@
+fun main {	
+	_snome;
+	 in("Ola mundo", _snome);
+	out(_snome);
+}
