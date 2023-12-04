@@ -97,6 +97,13 @@ public class Semantico implements Constants {
                 t2 = pilha_tipos.pop();
                 tipoResult = this.verificarTipoResultante(t1, t2, operador_relacional);
                 pilha_tipos.push(tipoResult);
+                if (operador_relacional == "==") {
+                    buffer += "ceq" + "\n";
+                } else if (operador_relacional == ">") {
+                    buffer += "cgt" + "\n";
+                } else if (operador_relacional == "<") {
+                    buffer += "clt" + "\n";
+                }
                 break;
             case 110:
                 // desempilhar dois tipos da pilha_tipos, empilhar o tipo resultante da operação
@@ -218,6 +225,13 @@ public class Semantico implements Constants {
                 buffer += t1 + ": " + "\n";
                 break;
             case 124:
+                t1 = pilha_tipos.pop();
+                if (!t1.equals("bool")) {
+                    throw new SemanticError(token.getLexeme() + " expressão incompatível em comando de repetição",
+                            token.getPosition());
+                }
+                novo_rotulo1 = pilha_tipos.pop();
+                buffer += "brtrue " + novo_rotulo1 + "\n";
                 break;
             case 125:
                 lista_id.add(token);

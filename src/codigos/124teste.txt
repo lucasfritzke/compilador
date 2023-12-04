@@ -1,0 +1,10 @@
+fun main {	
+    	_inum;
+	_inum =4;
+	_bvar;
+	_bvar = true;
+	while(_bvar) do {
+		out(_inum);
+		_bvar = false;
+};
+}

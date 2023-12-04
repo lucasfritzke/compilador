@@ -1,0 +1,10 @@
+fun main {	
+	if(false){
+		out("Olá mundo");
+	} else {
+		if (true) {
+		out("Segundo if ");
+		};
+	};
+
+}
