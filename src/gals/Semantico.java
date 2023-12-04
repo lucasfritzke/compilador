@@ -192,7 +192,7 @@ public class Semantico implements Constants {
                 break;
             case 125:
                 lista_id.add(token);
-                //buffer += "token.getLexeme" + "\n";
+                // buffer += "token.getLexeme" + "\n";
                 break;
             case 126:
                 for (Token t : lista_id) {
@@ -252,10 +252,24 @@ public class Semantico implements Constants {
                 lista_id.clear();
                 break;
             case 129:
+                
+                   for (Token t : lista_id) {
+                    // verificar se o identificador foi declarado, ou seja, se está na
+                    // tabela_simbolos
+                    if (!tabela_simbolos.containsKey(t.getLexeme())) {
+                        throw new SemanticError(t.getLexeme() + " não declarado", token.getPosition());
+                    } else {
+                        if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("int64")) {
+                            buffer += "conv.i8 \n";
+                        }
+                        buffer += "stloc " + t.getLexeme() + "\n";
+                    }
+                }
+                lista_id.clear();
                 break;
             case 130:
                 buffer += "ldstr" + "\n";
-                buffer += "call  void  [mscorlib]System.Console::Write (string)" + "\n";
+                buffer += "call  void  [mscorlib]System.Console::Write(string)" + "\n";
                 break;
             case 131:
                 // (a) verificar se o identificador (token.getLexeme) foi declarado, ou seja, se
@@ -275,6 +289,18 @@ public class Semantico implements Constants {
                             pilha_tipos.push(c.getTipo());
                         } else if (c.getTipo().equals("string")) {
                             buffer += "ldstr " + c.getValor() + "\n";
+                            pilha_tipos.push(c.getTipo());
+                        } else if (c.getTipo().equals("float64")) {
+                            buffer += "ldc.r8 " + c.getValor() + "\n";
+                            pilha_tipos.push(c.getTipo());
+                        } else if (c.getTipo().equals("bool")) {
+                            if (c.getValor().equals("true")) {
+                                buffer += "ldc.i4.1" + "\n";
+                                pilha_tipos.push(c.getTipo());
+                            } else {
+                                buffer += "ldc.i4.0" + "\n";
+                                pilha_tipos.push(c.getTipo());
+                            }
                         }
                     }
                 }

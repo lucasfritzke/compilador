@@ -229,7 +229,8 @@ public class CompiladorUtil {
 			}
 
 		} catch (SemanticError e) {
-			// Trata erros semânticos
+			contLinha = this.getLinha(codigoFonte, e.getPosition());
+			messageBlock.setText("Erro na linha " + contLinha + " -"+e.getMessage());
 		}
 
 	}

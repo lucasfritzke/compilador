@@ -1,0 +1,6 @@
+fun main {	
+	_inum;
+	_ilado, _iarea: 3;
+	_inum = (2+2);
+	out(_ilado);
+}

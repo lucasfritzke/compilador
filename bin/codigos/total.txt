@@ -1,0 +1,7 @@
+fun main {	
+	 # 125
+	_inum2;
+	_inum3: 4; # 126
+	_inum4, _inum5: 7; # 127
+	out( _inum5 );
+}
