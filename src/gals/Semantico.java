@@ -20,7 +20,7 @@ public class Semantico implements Constants {
     private HashMap<String, CelulaTabelaSimbolos> tabela_simbolos = new HashMap();
     private Stack<String> pilha_rotulos = new Stack<String>();
     private ArrayList<Token> lista_id = new ArrayList<Token>();
-    private String operador_relacional;
+    private String operador_relacional ="";
     private int rotulo_counter = 1;
 
     private String buffer = "";
@@ -89,7 +89,8 @@ public class Semantico implements Constants {
                 break;
             case 108:
                 // <operador_relacional>::= "==" | "!=" | "<" | ">" ;
-                operador_relacional = verificarOperadorRelacional(operador_relacional);
+                operador_relacional = token.getLexeme();
+                //System.out.println(operador_relacional);
                 break;
             case 109:
                 // Feito em parte
@@ -97,12 +98,20 @@ public class Semantico implements Constants {
                 t2 = pilha_tipos.pop();
                 tipoResult = this.verificarTipoResultante(t1, t2, operador_relacional);
                 pilha_tipos.push(tipoResult);
-                if (operador_relacional == "==") {
+                if (operador_relacional.equals("==")) {
                     buffer += "ceq" + "\n";
-                } else if (operador_relacional == ">") {
+                    pilha_tipos.push("bool");
+                } else if (operador_relacional.equals(">")) {
                     buffer += "cgt" + "\n";
-                } else if (operador_relacional == "<") {
+                    pilha_tipos.push("bool");
+                } else if (operador_relacional.equals("<")) {
                     buffer += "clt" + "\n";
+                    pilha_tipos.push("bool");
+                } else if (operador_relacional.equals("!=")) {
+                    buffer += "ceq" + "\n";
+                    buffer += "ldc.i4.1" + "\n";
+                    buffer += "xor" + "\n";
+                    pilha_tipos.push("bool");
                 }
                 break;
             case 110:
@@ -370,25 +379,11 @@ public class Semantico implements Constants {
                     CelulaTabelaSimbolos c = tabela_simbolos.get(token.getLexeme());
                     // (c) em caso positivo e é identificador de constante:
                     if (c.getValor() != null) {
+                        buffer += "ldloc " + token.getLexeme() + "\n";
                         if (c.getTipo().equals("int64")) {
-                            buffer += "ldc.i8 " + c.getValor() + "\n";
                             buffer += "conv.r8 \n";
-                            pilha_tipos.push(c.getTipo());
-                        } else if (c.getTipo().equals("string")) {
-                            buffer += "ldstr " + c.getValor() + "\n";
-                            pilha_tipos.push(c.getTipo());
-                        } else if (c.getTipo().equals("float64")) {
-                            buffer += "ldc.r8 " + c.getValor() + "\n";
-                            pilha_tipos.push(c.getTipo());
-                        } else if (c.getTipo().equals("bool")) {
-                            if (c.getValor().equals("true")) {
-                                buffer += "ldc.i4.1" + "\n";
-                                pilha_tipos.push(c.getTipo());
-                            } else {
-                                buffer += "ldc.i4.0" + "\n";
-                                pilha_tipos.push(c.getTipo());
-                            }
                         }
+                        pilha_tipos.push(c.getTipo());
                     }
                 }
                 break;

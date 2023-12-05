@@ -1,4 +1,6 @@
 fun main {	
-	_inum: -1;
-	out(-29 + _inum);
+	_inum; 
+	_inum = 1;
+	_inum = _inum + _inum;
+	out(_inum);
 }
