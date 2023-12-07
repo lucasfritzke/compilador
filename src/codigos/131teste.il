@@ -5,22 +5,12 @@
 .class public teste {
 .method static public void _principal(){
 .entrypoint
-.locals (int64 _inum)
-ldc.i8 1
-conv.r8
+.locals (int64 _ilado)
+ldstr
+call  void  [mscorlib]System.Console::Write(string)
+call int64 [mscorlib]System.Console::ReadLine() 
 conv.i8 
-stloc  _inum
-ldloc _inum
-conv.r8 
-ldloc _inum
-conv.r8 
-add 
-conv.i8 
-stloc  _inum
-ldloc _inum
-conv.r8 
-conv.i8
-call void [mscorlib]System.Console::WriteLine(int64)
+stloc _ilado
 ret
 }
 }
