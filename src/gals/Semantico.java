@@ -194,7 +194,7 @@ public class Semantico implements Constants {
                 } else {
                     // Encerrar a execução e apontar erro semântico, indicando a linha e
                     // apresentando a mensagem expressão incompatível em comando de seleção;
-                    throw new SemanticError(token.getLexeme() + " expressão incompatível em comando de seleção",
+                    throw new SemanticError(" expressão incompatível em comando de seleção",
                             token.getPosition());
                 }
                 break;
@@ -347,16 +347,16 @@ public class Semantico implements Constants {
                     } else {
                         CelulaTabelaSimbolos c = tabela_simbolos.get(t.getLexeme());
                         if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("int64")) {
-                            buffer += "call int64 [mscorlib]System.Console::ReadLine() \n";
-                            buffer += "conv.i8 \n";
+                            buffer += "call string [mscorlib]System.Console::ReadLine() \n";
+                            buffer += "call int64 [mscorlib]System.Int64::Parse(string) \n";
                         } else if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("float64")) {
-                            buffer += "call float64 [mscorlib]System.Console::ReadLine() \n";
-
+                            buffer += "call string [mscorlib]System.Console::ReadLine() \n";
+                            buffer += "call float64 [mscorlib]System.Double::Parse(string) \n";
                         } else if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("string")) {
                             buffer += "call string [mscorlib]System.Console::ReadLine() \n";
-
                         } else if (this.tipoVariavel(t.getLexeme()).equalsIgnoreCase("bool")) {
-                            buffer += "call bool [mscorlib]System.Console::ReadLine() \n";
+                            buffer += "call string [mscorlib]System.Console::ReadLine() \n";
+                            buffer += "call bool [mscorlib]System.Boolean::Parse(string) \n";
                         }
                         buffer += "stloc " + t.getLexeme() + "\n";
                     }
@@ -364,8 +364,8 @@ public class Semantico implements Constants {
                 lista_id.clear();
                 break;
             case 130:
-                buffer += "ldstr" + "\n";
-                buffer += "call  void  [mscorlib]System.Console::Write(string)" + "\n";
+                buffer += "ldstr " + token.getLexeme()+ "\n";
+                buffer += "call void [mscorlib]System.Console::Write(string)" + "\n";
                 break;
             case 131:
                 // (a) verificar se o identificador (token.getLexeme) foi declarado, ou seja, se
@@ -377,14 +377,13 @@ public class Semantico implements Constants {
                     throw new SemanticError(token.getLexeme() + " não declarado", token.getPosition());
                 } else {
                     CelulaTabelaSimbolos c = tabela_simbolos.get(token.getLexeme());
-                    // (c) em caso positivo e é identificador de constante:
-                    if (c.getValor() != null) {
+                    // (c) em caso positivo e é identificador de constante
                         buffer += "ldloc " + token.getLexeme() + "\n";
                         if (c.getTipo().equals("int64")) {
                             buffer += "conv.r8 \n";
                         }
                         pilha_tipos.push(c.getTipo());
-                    }
+                    
                 }
                 break;
 

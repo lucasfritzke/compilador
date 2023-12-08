@@ -1,0 +1,22 @@
+
+
+fun main { 
+_blado;
+_inum2;
+_inum;
+_inum = 500;
+_inum2 = 10;
+_blado = ((_inum+10)/2 > 25);
+out(_blado);
+
+while(_inum > 100) do {
+	
+	out(_inum);
+	while(_inum2 > 0) do {
+		out(_inum2);
+		_inum2 = _inum2 - 2;
+	};
+	_inum = _inum - 70;
+};
+
+ }

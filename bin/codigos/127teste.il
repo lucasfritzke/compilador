@@ -21,23 +21,27 @@ stloc  _stext1
 stloc  _stext2
 ldc.r8 1.235
 stloc  _fnum
-ldc.i4.0
+ldc.i8 2
+conv.r8
+ldc.i8 1
+conv.r8
+cgt
 stloc  _bfalse
 ldc.i4.1
 stloc  _btrue
-ldc.i8 25
+ldloc _inum1
 conv.r8 
 conv.i8
 call void [mscorlib]System.Console::WriteLine(int64)
-ldstr "Lucas"
+ldloc _stext1
 call void [mscorlib]System.Console::WriteLine(string)
-ldstr "Lucas"
+ldloc _stext2
 call void [mscorlib]System.Console::WriteLine(string)
-ldc.r8 1.235
+ldloc _fnum
 call void [mscorlib]System.Console::WriteLine(float64)
-ldc.i4.0
+ldloc _bfalse
 call void [mscorlib]System.Console::WriteLine(bool)
-ldc.i4.1
+ldloc _btrue
 call void [mscorlib]System.Console::WriteLine(bool)
 ret
 }
