@@ -237,7 +237,7 @@ public class Semantico implements Constants {
                     throw new SemanticError(" expressão incompativel em comando de repetição",
                             token.getPosition());
                 }
-                novo_rotulo1 = pilha_tipos.pop();
+                novo_rotulo1 = pilha_rotulos.pop();
                 buffer += "brtrue " + novo_rotulo1 + "\n";
                 break;
             case 125:

@@ -1,0 +1,9 @@
+fun main {	
+	_in;
+	_in =3;
+	repeat {
+	out(_in);
+	_in = _in -1;
+	} while (_in > -3);
+	
+}
