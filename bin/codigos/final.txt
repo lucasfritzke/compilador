@@ -1,0 +1,10 @@
+fun main { 
+	if(-7 == 0){
+		out("ola");
+	};
+	repeat{
+		out("Lucas");	
+	} while(_num);
+
+	out("oi", 123, true);
+}

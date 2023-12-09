@@ -29,10 +29,9 @@ public class Semantico implements Constants {
         this.filename = name;
     }
 
-    // 1º) #100, #101, #102, #114, #115
+    
     public void executeAction(int action, Token token) throws SemanticError {
-        // buffer += "A��o #" + action + ", Token: " + token;
-        System.out.println("A��o #" + action + ", Token: " + token);
+        
 
         String tipo = "";
         switch (action) {
@@ -184,7 +183,6 @@ public class Semantico implements Constants {
                 }
                 break;
             case 118:
-                // Incompleto
                 t1 = pilha_tipos.pop();
                 if (t1.equals("bool")) {
                     String novo_rotulo1 = "l" + rotulo_counter;
@@ -194,7 +192,7 @@ public class Semantico implements Constants {
                 } else {
                     // Encerrar a execução e apontar erro semântico, indicando a linha e
                     // apresentando a mensagem expressão incompatível em comando de seleção;
-                    throw new SemanticError(" expressão incompatível em comando de seleção",
+                    throw new SemanticError(" expressão incompativel em comando de seleção",
                             token.getPosition());
                 }
                 break;
@@ -219,7 +217,7 @@ public class Semantico implements Constants {
             case 122:
                 t1 = pilha_tipos.pop();
                 if (!t1.equals("bool")) {
-                    throw new SemanticError(token.getLexeme() + " expressão incompatível em comando de repetição",
+                    throw new SemanticError(" expressão incompativel em comando de repetição",
                             token.getPosition());
                 }
                 novo_rotulo2 = "l" + rotulo_counter;
@@ -236,7 +234,7 @@ public class Semantico implements Constants {
             case 124:
                 t1 = pilha_tipos.pop();
                 if (!t1.equals("bool")) {
-                    throw new SemanticError(token.getLexeme() + " expressão incompatível em comando de repetição",
+                    throw new SemanticError(" expressão incompativel em comando de repetição",
                             token.getPosition());
                 }
                 novo_rotulo1 = pilha_tipos.pop();

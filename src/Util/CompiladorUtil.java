@@ -178,7 +178,7 @@ public class CompiladorUtil {
 			// Contador de quebras de linha
 
 			contLinha = this.getLinha(codigoFonte, e.getPosition());
-			String str = "";
+			String str = " ";
 			contPos = e.getPosition();
 
 			if (e.getMessage().equals("Simbolo invalido")) {
@@ -191,18 +191,20 @@ public class CompiladorUtil {
 			} else {
 
 				// Caso seja uma palavra reservada ou identificador
-				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
+				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n'
+					  && codigoFonte.charAt(contPos) != '(') {
 					contPos--;
 				}
 				contPos++;
 				while (contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' '
-						&& codigoFonte.charAt(contPos) != '\n') {
+						&& codigoFonte.charAt(contPos) != '\n' && codigoFonte.charAt(contPos) != ';'
+						&& codigoFonte.charAt(contPos) != ')') {
 					str += codigoFonte.charAt(contPos);
 					contPos++;
 				}
 
 			}
-			messageBlock.setText("Erro na linha " + contLinha + ": " + str + " " + e.getMessage());
+			messageBlock.setText("Erro na linha " + contLinha + ": " + str + " " +e.getMessage());
 
 		} catch (SyntaticError e) {
 
@@ -212,12 +214,14 @@ public class CompiladorUtil {
 			if (token.equals("palavra reservada")) {
 				contPos = e.getPosition();
 				token ="";
-				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n') {
+				while (contPos >= 0 && codigoFonte.charAt(contPos) != ' ' && codigoFonte.charAt(contPos) != '\n'
+					   && codigoFonte.charAt(contPos) != '(') {
 					contPos--;
 				}
 				contPos++;
 				while (contPos < codigoFonte.length() && codigoFonte.charAt(contPos) != ' '
-						&& codigoFonte.charAt(contPos) != '\n') {
+						&& codigoFonte.charAt(contPos) != '\n' && codigoFonte.charAt(contPos) != ';'
+						&& codigoFonte.charAt(contPos) != ')') {
 					token += codigoFonte.charAt(contPos);
 					contPos++;
 				}
