@@ -87,7 +87,7 @@ public class Main {
         JTextField progressBar = new JTextField();
         progressBar.setName("StatusBar");
         progressBar.setEditable(false);
-        util.addComponent(progressBar);
+        util.addComponent(progressBar); // 4
         springLayout.putConstraint(SpringLayout.NORTH, progressBar, 6, SpringLayout.SOUTH, splitPane);
         springLayout.putConstraint(SpringLayout.WEST, progressBar, 10, SpringLayout.WEST, frame.getContentPane());
         springLayout.putConstraint(SpringLayout.SOUTH, progressBar, -10, SpringLayout.SOUTH, frame.getContentPane());
