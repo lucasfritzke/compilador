@@ -6,14 +6,14 @@
 .method static public void _principal(){
 .entrypoint
 .locals (int64 _inum)
-.locals (float64 _fnum)
 ldc.i8 1
 conv.r8
 conv.i8 
 stloc  _inum
 ldloc _inum
 conv.r8 
-ldc.r8 2.255
+ldloc _inum
+conv.r8 
 add 
 conv.i8 
 stloc  _inum
